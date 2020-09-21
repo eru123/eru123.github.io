@@ -11,8 +11,6 @@ try {
       routes.push(r.route)
     }
 
-    
-
     if (typeof r.page != "undefined") {
       store.state.menu.push({
         name: r.page,
@@ -46,7 +44,6 @@ new Vue({
   },
   methods: {
     fetchSource : function(){
-      console.log("s")
       if (this.sourcesFetchStatus.toBeFetch) {
         try {
           sources.forEach((category) => {
@@ -68,6 +65,7 @@ new Vue({
               })
               .then(r => {
                 this.sourcesFetchStatus.fetch = this.sourcesFetchStatus.fetch + 1;
+                idbKeyval.set(link,r);
               })
               .catch(e => {
                 this.sourcesFetchStatus.error = this.sourcesFetchStatus.error + 1;
@@ -75,9 +73,12 @@ new Vue({
               .finally(async () => {
                 if(this.sourcesFetchStatus.error + this.sourcesFetchStatus.fetch == this.sources.length){
                   console.log("[SOURCES] " + this.sourcesFetchStatus.fetch + " source fetched, " + this.sourcesFetchStatus.error  + " source failed.")
-                  await delay(5)
+                  await delay(2)
                   this.sourcesFetchStatus.fetching = false;
                 }
+                store.state.sources = this.sources
+                store.state.sourcesFetchStatus = this.sourcesFetchStatus
+                store.state.sources = this.sources
               })
           })
         } else {

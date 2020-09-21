@@ -31,7 +31,17 @@ const sources = [
 		]
 	},
 	{
-
+		name: "reddit",
+		links:[
+			"https://www.reddit.com/r/PampamilyangPaoLUL.json",
+			"https://www.reddit.com/r/ProgrammerHumor.json",
+			"https://www.reddit.com/r/wholesomememes.json",
+			"https://www.reddit.com/r/sarcasm.json",
+			"https://www.reddit.com/r/ComedyCemetery.json",
+			"https://www.reddit.com/r/sadcringe.json",
+			"https://www.reddit.com/r/terriblefacebookmemes.json",
+			"https://www.reddit.com/r/im14andthisisdeep.json"
+		]
 	}
 ]
 
@@ -157,6 +167,7 @@ const app_data = [
 	},
 	{
 		page: "Books",
+		icon: "mdi-book-open-variant",
 		route : {
 			name : "Books",
 			path : "/books",
@@ -175,6 +186,7 @@ const app_data = [
 	},
 	{
 		page: "Videos",
+		icon: "mdi-filmstrip",
 		route : {
 			name : "Videos",
 			path : "/videos",
@@ -192,7 +204,91 @@ const app_data = [
 		}
 	},
 	{
+		page: "Memes",
+		icon: "mdi-dance-pole",
+		route : {
+			name : "Memes",
+			path : "/memes",
+			component : {
+				template: "#xdata",
+				data(){
+					return {
+						posts: [
+							{
+								type: "loading",
+							}
+						]
+					}
+				},
+				created: async function(){
+					changeDocTitle("Memes")
+					while(store.state.sourcesFetchStatus.fetching){
+						await delay(.5)
+					}
+					this.refreshMemes()
+				},
+				methods: {
+					refreshMemes: async function(){
+						this.posts = []
+						var reddit = []
+						var memesCounter = 0;
+						await sources.forEach(async (source) => {
+							if (source.name == "reddit") {
+								var rtd = [];
+								await source.links.forEach(async (link) => {
+									var xdta = await idbKeyval.get(link);
+									if (typeof xdta == "object") {
+										var xdtb = [];
+										await xdta.data.children.forEach(async (xChild) => {
+											var title = xChild.data.title || null;
+											var subtitle = xChild.data.subreddit || null;
+											var imageUrl = xChild.data.url_overridden_by_dest || null;
+											var content = xChild.data.selftext || null;
+											if ((imageChecker(imageUrl))) {
+												await xdtb.push({
+													type: "card",
+													title: xChild.data.title || null,
+													subtitle: xChild.data.subreddit || null,
+													imageUrl: xChild.data.url_overridden_by_dest || null,
+													content: xChild.data.selftext || null
+												})
+											}
+										})
+
+										await rtd.push(xdtb)
+										memesCounter = memesCounter + xdtb.length;
+									}
+								});
+								await delay(.2)
+								for (var i = 0; i < 30; i++) {
+									for(dt in rtd){
+										if (rtd[dt][i]) {
+											reddit.push(rtd[dt][i])
+										}
+									}
+								}
+								this.posts = reddit
+							}
+						});
+						await delay(.3)
+						console.log("[MEMES] " + memesCounter + " image links fetched.")
+						if (this.posts.length == 0) {
+							this.posts = [
+								{
+									type: "paragraph",
+									alignment: "center",
+									content: "No data"
+								}
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	{
 		page: "About",
+		icon: "mdi-alpha-a-circle",
 		route : {
 			name : "About",
 			icon: "mdi-info",

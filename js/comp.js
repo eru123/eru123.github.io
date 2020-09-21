@@ -29,3 +29,10 @@ function delay(seconds){
 		setTimeout(function(){resolve(seconds * 1000)}, seconds * 1000)
 	})
 }
+function imageChecker(str){
+	var regex = /(\.jpg|\.png)/gm;
+	if(regex.exec(str)){
+		return true
+	}
+	return false
+}

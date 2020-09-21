@@ -76,6 +76,7 @@
               <v-card-title v-if="!post.avatar && post.title">{{post.title}}</v-card-title>
               <v-card-subtitle v-if="!post.avatar && post.subtitle">{{post.subtitle}}</v-card-subtitle>
               <v-card-text v-if="post.content">{{post.content}}</v-card-text>
+              <v-img v-if="post.imageUrl" :src="post.imageUrl"></v-img>
               <v-card-actions v-if="post.actions && post.actions.length > 0">
                 <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
               </v-card-actions>
@@ -96,6 +97,7 @@
                 <v-expansion-panel-content>{{item.content}}</v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
+            <div v-if="post.type == 'loading'" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate  ></v-progress-circular></div>
           </div>
         </div>
       </div>
