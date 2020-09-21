@@ -2,150 +2,95 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="img/game_item_default.png" />
-    <link rel="stylesheet" type="text/css" href="css/all.css" />
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/all.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="css/vuetify-gfont.css">
+    <link rel="stylesheet" href="css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="css/vuetify.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/default.css" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   </head>
-  <body>
+  <body style="display: none;">
     <div id="app">
-      <router-view></router-view>
+      <v-app>
+        <v-navigation-drawer v-model="drawer" app>
+          <v-list dense>
+            <v-list-item v-for="item in menu" link :href="item.link">
+              <v-list-item-action>
+                <v-icon>{{item.icon}}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{item.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-navigation-drawer>
+
+        <v-app-bar
+          app
+          color="primary"
+          dark
+        >
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-toolbar-title>{{pageName}}</v-toolbar-title>
+        </v-app-bar>
+
+        <!-- Sizes your content based upon application components -->
+        <v-main>
+
+          <!-- Provides the application the proper gutter -->
+          <v-container fluid>
+
+            <!-- If using vue-router -->
+            <router-view></router-view>
+          </v-container>
+        </v-main>
+      </v-app>
     </div>
 
-    <!-- Game Jacknpoy -->
-    <script type="text/x-template" id="game_jacknpoy">
-      <page-wrapper>
-
-      </page-wrapper>
-    </script>
-
-    <!-- Under construction app -->
-    <script type="text/x-template" id="app_uc">
-      <page-wrapper>
-        <under-construction></under-construction>
-      </page-wrapper>
-    </script>
-
-    <!-- Sidebar -->
-    <script type="text/x-template" id="sidebar">
-      <div class="sticky-top">
-        <nav class="navbar bg-light sticky-top bshad-sb">
-          <span>
-            <i v-if="list.length == 0 && back" class="fad fa-arrow-left my-0"></i>
-            <i v-if="list.length > 0" @click="open" class="fad fa-angle-right my-0 ad"></i>
-          </span>
-          <h4 class="m-0">{{title}}</h4>
-        </nav>
-        <div class="sidebar">
-          <div v-bind:class="sbMenuClass">
-            <nav class="navbar bg-light sticky-top bshad-sb">
-              <h4 class="m-0">Menu</h4>
-                <span>
-                <i @click="close" class="fad fa-angle-left my-0 ad"></i>
-              </span>
-            </nav>
-            <router-link class="sidebar-item modern" v-for="item in list" :to="item.link">{{item.name}}</router-link>
+    <script type="text/x-template" id="xdata">
+      <div>
+        <div v-if="posts || false">
+          <div v-for="post in posts">
+            <h1 v-if="post.type == 'heading' && post.level == 1">{{post.content}}</h1>
+            <h2 v-if="post.type == 'heading' && post.level == 2">{{post.content}}</h2>
+            <h3 v-if="post.type == 'heading' && post.level == 3">{{post.content}}</h3>
+            <h4 v-if="post.type == 'heading' && post.level == 4">{{post.content}}</h4>
+            <h5 v-if="post.type == 'heading' && post.level == 5">{{post.content}}</h5>
+            <h6 v-if="post.type == 'heading' && post.level == 6">{{post.content}}</h6>
+            <p v-if="post.type == 'paragraph' && post.alignment == 'left'" style="text-align:left">{{post.content}}</p>
+            <p v-if="post.type == 'paragraph' && post.alignment == 'right'" style="text-align:right">{{post.content}}</p>
+            <p v-if="post.type == 'paragraph' && post.alignment == 'center'" style="text-align:center">{{post.content}}</p>
+            <p v-if="post.type == 'paragraph' && post.alignment == 'justify'" style="text-align:justify">{{post.content}}</p>
+            <v-card v-if="post.type == 'card'" class="my-8">
+              <v-card-title v-if="post.title">{{post.title}}</v-card-title> 
+              <v-card-subtitle v-if="post.subtitle">{{post.subtitle}}</v-card-subtitle>
+              <v-card-text v-if="post.content">{{post.content}}</v-card-text>
+              <v-card-actions v-if="post.actions && post.actions.length > 0">
+                <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-carousel hide-delimiters v-if="post.type == 'carousel'">
+              <v-carousel-item
+                v-for="(item,i) in post.items"
+                :key="i"
+                :src="item.src"
+              ></v-carousel-item>
+            </v-carousel>
           </div>
-          <div @click="close" v-bind:class="sbBlankClass"></div>
-        </div >
+        </div>
       </div>
     </script>
 
-    <!-- Home -->
-    <script type="text/x-template" id="home">
-      <page-wrapper>
-          <div v-if="rPosts.length > 0">
-            <div style="display:flex;align-items:center;justify-content:space-between"><h5 class="text-secondary m-0">Public Posts</h5></div>
-            <card v-for="post in rPosts" class="mb-4 p-4">
-              <div class="app-info p" v-if="post.type == 'announcement'">
-                <span class="app-title">{{post.title}}</span>
-                <hr />
-                <p class="app-description text-justify">{{post.content || "This post has no content"}}</p>
-              </div>
-            </card>
-          </div>
-          <div v-if="rApps.length > 0" class="mb-4 pb-2">
-            <div style="display:flex;align-items:center;justify-content:space-between"><h5 class="text-secondary m-0">Recommended Apps</h5><router-link :to="{name: 'Apps'}">See more</router-link></div>
-            <card class="app-item" v-for="app in rApps">
-              <img :src="app.icon || defaultAppIcon" loading="lazy">
-              <div class="app-info">
-                <span class="app-title" @click="follow(app.link)">{{app.title}}</span>
-                <hr />
-                <p class="app-description">{{app.description || "This app has no description"}}</p>
-              </div>
-            </card>
-          </div>
-          <div v-if="rGames.length > 0" class="mb-4 pb-2">
-            <div style="display:flex;align-items:center;justify-content:space-between"><h5 class="text-secondary m-0">Recommended Games</h5><router-link :to="{name: 'Games'}">See more</router-link></div>
-            <card class="app-item" v-for="app in rGames">
-              <img :src="app.icon || defaultGameIcon" loading="lazy">
-              <div class="app-info">
-                <span class="app-title" @click="follow(app.link)">{{app.title}}</span>
-                <hr />
-                <p class="app-description">{{app.description || "This app has no description"}}</p>
-              </div>
-            </card>
-          </div>
-
-          
-          <hr>
-          <card v-for="post in rPosts" class="mb-4 p-4 text-center">
-              <h4 class="m-0">End of Results</h4>
-          </card>
-      </page-wrapper>>
-    </script>
-
-    <!-- Apps -->
-    <script type="text/x-template" id="apps">
-      <page-wrapper>
-        <div class="app-list-container">
-            <div v-if="list.length <= 0" class="m-4 p-4 text-center text-secondary">
-              No Apps Intalled
-            </div>
-            <div class="app-item" v-for="app in list">
-              <img :src="app.icon || defaultIcon" loading="lazy">
-              <div class="app-info">
-                <span class="app-title" @click="follow(app.link)">{{app.title}}</span>
-                <hr />
-                <p class="app-description">{{app.description || "This app has no description"}}</p>
-              </div>
-            </div>
-          </div>
-      </page-wrapper>
-    </script>
-
-    <!-- ABOUT -->
-    <script type="text/x-template" id="about">
-      <page-wrapper>
-        <card>
-            <div class="container mt-4">
-              <h4 class="m-0 font-weight-bold">{{appName}} <small>{{version}}</small> </h4>
-              <h6 class="text-secondary">{{license}} </h6>
-              <p class="mt-4 text-justify">{{description}}</p>
-            </div>
-          </card>
-          <card>
-            <div class="container mt-4">
-
-              <div class="my-4">
-                <h5 class="font-weight-bold">Follow us on</h5>
-                <div v-for="contact in contacts" class="about-contacts-item" style="display:flex" @click="contact.link ? (location.href = contact.link) : null">
-                  <img v-if="contact.img" with :src="contact.img">
-                  <div>{{contact.title}}</div>
-                </div>
-              </div>
-            </div>
-          </card>
-      </page-wrapper>
-    </script>
 
     <script src="js/vue.min.js"></script>
     <script src="js/vue-router.js"></script>
     <script src="js/vuex.js"></script>
+    <script src="js/vuetify.js"></script>
     <script src="js/axios.min.js"></script>
-    <script src="js/idb.js"></script>
-    <script src="js/config.js"></script>
+    <script src="js/comp.js"></script>
+    <script src="app.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
