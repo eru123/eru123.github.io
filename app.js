@@ -1,5 +1,13 @@
 const lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto labore debitis suscipit esse, consectetur cum, vitae laborum aliquid facilis nam a accusantium perspiciatis maxime illo voluptate, dolorum numquam assumenda ducimus."
+const sample_yte = '<iframe width="560" height="315" src="https://www.youtube.com/embed/rpQhIdRwNMA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
 
+const bookshelf = [
+	{
+		category: "Programming",
+		tags: ["SQL","PHP"],
+		link: "http://localhost/aaa.pdf"
+	}
+]
 const sample_posts = [
 	{
 		type: "heading",
@@ -70,6 +78,9 @@ const sample_posts = [
 	},
 	{
 		type: "card",
+		avatar: false,
+		img:"img/facebook_logo.png",
+		icon:"mdi-home",
 		title: "I AM A CARD",
 		subtitle: "subtitle",
 		content: lorem + lorem,
@@ -83,8 +94,11 @@ const sample_posts = [
 				link: ""
 			}
 		]
+	},
+	{
+		type: "youtube",
+		link: "https://www.youtube.com/embed/rpQhIdRwNMA"
 	}
-
 ];
 
 const app_data = [
@@ -115,19 +129,129 @@ const app_data = [
 		}
 	},
 	{
-		page : "About",
+		page: "About",
 		route : {
 			name : "About",
+			icon: "mdi-info",
 			path : "/about",
 			component : {
 				template: "#xdata",
 				data(){
 					return {
-						posts: sample_posts
+						posts: [
+							{
+								type: "heading",
+								level: 1,
+								content: "Red Mantis"
+							},
+							{
+								type: "paragraph",
+								alignment: "justify",
+								content: "A free and open-source platform that provides collection of web services, information, and intertainment. Our mission is to give free knowledge and expand the open-source community to help everyone in their careers."
+							}
+						]
 					}
 				},
 				created(){
 					changeDocTitle("About")
+				}
+			}
+		}
+	},
+	{
+		page: "Contact us",
+		icon: "mdi-email",
+		route: {
+			name: "ContactUs",
+			path: "/contactus",
+			component: {
+				template: "#xdata",
+				data(){
+					return {
+						posts: [
+							{
+								type: "heading",
+								level: 1,
+								content: "Contact us on"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/facebook_logo.png",
+								title: "Facebook",
+								subtitle: "@lighty262"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/instagram_logo.png",
+								title: "Instagram",
+								subtitle: "@yeoligo123"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/github_logo.png",
+								title: "Github",
+								subtitle: "@eru123"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/gmail_logo.png",
+								title: "Gmail",
+								subtitle: "yeoligoakino@gmail.com"
+							},
+						]
+					}
+				},
+				created(){
+					changeDocTitle("Red Mantis")
+				}
+			}
+		}
+	},
+	{
+		page: "Donate",
+		icon: "mdi-heart",
+		route: {
+			name: "Donate",
+			path: "/donate",
+			component: {
+				template: "#xdata",
+				data(){
+					return {
+						posts: [
+							{
+								type: "heading",
+								level: 1,
+								content: "Send Coffee on"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/patreon_logo.png",
+								title: "Patreon",
+								subtitle: "patreon.com/JAquino"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								img:"img/paypal_logo.png",
+								title: "PayPal",
+								subtitle: "paypal.me/ja1030"
+							}
+						]
+					}
+				},
+				created(){
+					changeDocTitle("Red Mantis")
 				}
 			}
 		}

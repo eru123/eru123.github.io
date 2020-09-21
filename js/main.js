@@ -11,7 +11,7 @@ app_data.forEach((r) => {
   if (typeof r.page != "undefined") {
     store.state.menu.push({
       name: r.page,
-      icon: r.icon || "mdi-alpha-l-box",
+      icon: r.icon || "mdi-alert",
       link: "#" + r.route.path
     })
   }

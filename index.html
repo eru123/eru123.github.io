@@ -63,9 +63,19 @@
             <p v-if="post.type == 'paragraph' && post.alignment == 'right'" style="text-align:right">{{post.content}}</p>
             <p v-if="post.type == 'paragraph' && post.alignment == 'center'" style="text-align:center">{{post.content}}</p>
             <p v-if="post.type == 'paragraph' && post.alignment == 'justify'" style="text-align:justify">{{post.content}}</p>
-            <v-card v-if="post.type == 'card'" class="my-8">
-              <v-card-title v-if="post.title">{{post.title}}</v-card-title> 
-              <v-card-subtitle v-if="post.subtitle">{{post.subtitle}}</v-card-subtitle>
+            <v-card v-if="post.type == 'card'" :class="'my-' + (post.my || '8')">
+              <v-list-item v-if="post.avatar">
+                <v-list-item-avatar color="grey" class="elevation-6" >
+                  <v-img v-if="post.img" :src="post.img"></v-img>
+                  <v-icon v-if="post.icon && !post.img">{{post.icon}}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="headline" v-if="post.title">{{post.title}}</v-list-item-title>
+                  <v-list-item-subtitle v-if="post.subtitle">{{post.subtitle}}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-card-title v-if="!post.avatar && post.title">{{post.title}}</v-card-title>
+              <v-card-subtitle v-if="!post.avatar && post.subtitle">{{post.subtitle}}</v-card-subtitle>
               <v-card-text v-if="post.content">{{post.content}}</v-card-text>
               <v-card-actions v-if="post.actions && post.actions.length > 0">
                 <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
@@ -78,6 +88,15 @@
                 :src="item.src"
               ></v-carousel-item>
             </v-carousel>
+            <div v-if="post.type=='youtube'" align="center">
+              <iframe :width="post.width || '100%'" :height="post.height || '300px'" :src="post.link || ''" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <v-expansion-panels accordion v-if="post.type == 'expansion-panel'">
+              <v-expansion-panel v-for="item in post.items">
+                <v-expansion-panel-header>{{item.title}}</v-expansion-panel-header>
+                <v-expansion-panel-content>{{item.content}}</v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </div>
         </div>
       </div>
