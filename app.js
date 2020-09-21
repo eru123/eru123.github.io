@@ -1,13 +1,40 @@
 const lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto labore debitis suscipit esse, consectetur cum, vitae laborum aliquid facilis nam a accusantium perspiciatis maxime illo voluptate, dolorum numquam assumenda ducimus."
 const sample_yte = '<iframe width="560" height="315" src="https://www.youtube.com/embed/rpQhIdRwNMA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
 
-const bookshelf = [
+const sources = [
 	{
-		category: "Programming",
-		tags: ["SQL","PHP"],
-		link: "http://localhost/aaa.pdf"
+		name: "books",
+		links:[
+			"api/bookshelf.json",
+			"https://eru123.github.io/api/bookshelf.json"
+		]
+	},
+	{
+		name: "videos",
+		links:[
+			"api/videos.json",
+			"https://eru123.github.io/api/videos.json"
+		]
+	},
+	{
+		name: "articles",
+		links:[
+			"api/articles.json",
+			"https://eru123.github.io/api/articles.json"
+		]
+	},
+	{
+		name: "announcements",
+		links:[
+			"api/announcements.json",
+			"https://eru123.github.io/api/announcements.json"
+		]
+	},
+	{
+
 	}
 ]
+
 const sample_posts = [
 	{
 		type: "heading",
@@ -102,14 +129,14 @@ const sample_posts = [
 ];
 
 const app_data = [
-	{
+	{ 	
 		route : {
 			name : "Default",
 			path: "",
 			redirect : "/home"
 		}
-	},
-	{	
+	},	
+	{
 		page : "Home",
 		icon : "mdi-home",
 		route : {
@@ -119,11 +146,47 @@ const app_data = [
 				template: "#xdata",
 				data(){
 					return {
-						posts: sample_posts
+						posts: []
 					}
 				},
 				created(){
 					changeDocTitle("Red Mantis")
+				}
+			}
+		}
+	},
+	{
+		page: "Books",
+		route : {
+			name : "Books",
+			path : "/books",
+			component : {
+				template: "#xdata",
+				data(){
+					return {
+						posts: []
+					}
+				},
+				created(){
+					changeDocTitle("Books")
+				}
+			}
+		}
+	},
+	{
+		page: "Videos",
+		route : {
+			name : "Videos",
+			path : "/videos",
+			component : {
+				template: "#xdata",
+				data(){
+					return {
+						posts: []
+					}
+				},
+				created(){
+					changeDocTitle("Videos")
 				}
 			}
 		}
@@ -147,7 +210,7 @@ const app_data = [
 							{
 								type: "paragraph",
 								alignment: "justify",
-								content: "A free and open-source platform that provides collection of web services, information, and intertainment. Our mission is to give free knowledge and expand the open-source community to help everyone in their careers."
+								content: "A free and open-source platform that provides collection of Web Services, Informations, Videos, Books and Entertainments. Our mission is to give free and reliable information and expand the open-source community to help everyone in their careers specially students and self-taught developers."
 							}
 						]
 					}
@@ -205,6 +268,14 @@ const app_data = [
 								img:"img/gmail_logo.png",
 								title: "Gmail",
 								subtitle: "yeoligoakino@gmail.com"
+							},
+							{
+								type: "card",
+								avatar: true,
+								my: 4,
+								icon: "mdi-phone",
+								title: "Phone",
+								subtitle: "(+63) 936 852 3483"
 							},
 						]
 					}

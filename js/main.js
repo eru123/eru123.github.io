@@ -4,29 +4,87 @@
 
 const routes = [];
 
-app_data.forEach((r) => {
-  if (typeof r.route != "undefined") {
-    routes.push(r.route)
-  }
-  if (typeof r.page != "undefined") {
-    store.state.menu.push({
-      name: r.page,
-      icon: r.icon || "mdi-alert",
-      link: "#" + r.route.path
-    })
-  }
-});
+try {
+  app_data.forEach((r) => {
 
-console.log(store.state)
+    if (typeof r.route != "undefined") {
+      routes.push(r.route)
+    }
 
-console.log(routes)
+    
+
+    if (typeof r.page != "undefined") {
+      store.state.menu.push({
+        name: r.page,
+        icon: r.icon || "mdi-alert",
+        link: "#" + r.route.path
+      })
+    }
+  });
+
+  if (routes.length > 0) {
+    console.log("[ROUTER] " + routes.length + " routes compiled.");
+  } else {
+    console.warn("[ROUTER] 0 routes compiled");
+  }
+
+} catch(e) {
+  console.error("[APP_DATA] Failed to compile");
+}
+
 var router = new VueRouter({ routes: routes });
 
 new Vue({
   el: "#app",
   data: store.state,
   created(){
+
     document.body.style.display = "block";
+    changeDocTitle("App");
+    this.fetchSource();
+    setInterval(()=>this.fetchSource(),1000*60*10)
+  },
+  methods: {
+    fetchSource : function(){
+      console.log("s")
+      if (this.sourcesFetchStatus.toBeFetch) {
+        try {
+          sources.forEach((category) => {
+            if (category.links && category.links.length > 0) {
+              category.links.forEach((link) => {this.sources.push(link)})
+            }
+          });
+        } catch(e) {
+          console.error("[SOURCES] Failed to compile.")
+        }
+        
+        if (this.sources.length > 0) {
+          console.log("[SOURCES] Fetching " + this.sources.length + " sources." );
+          this.sourcesFetchStatus.fetching = true;
+          this.sources.forEach((link) => {
+            fetch(link)
+              .then(r => {
+                return r.json()
+              })
+              .then(r => {
+                this.sourcesFetchStatus.fetch = this.sourcesFetchStatus.fetch + 1;
+              })
+              .catch(e => {
+                this.sourcesFetchStatus.error = this.sourcesFetchStatus.error + 1;
+              })
+              .finally(async () => {
+                if(this.sourcesFetchStatus.error + this.sourcesFetchStatus.fetch == this.sources.length){
+                  console.log("[SOURCES] " + this.sourcesFetchStatus.fetch + " source fetched, " + this.sourcesFetchStatus.error  + " source failed.")
+                  await delay(5)
+                  this.sourcesFetchStatus.fetching = false;
+                }
+              })
+          })
+        } else {
+          console.warn("[SOURCES] No source to fetch.")
+        }
+      }
+    }
   },
   store,
   router,
