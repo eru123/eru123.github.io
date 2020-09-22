@@ -44,6 +44,9 @@ new Vue({
   },
   methods: {
     fetchSource : function(){
+      this.sources = []
+      this.sourcesFetchStatus.fetch = 0;
+      this.sourcesFetchStatus.error = 0;
       if (this.sourcesFetchStatus.toBeFetch) {
         try {
           sources.forEach((category) => {
