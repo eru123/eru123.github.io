@@ -1,95 +1,42 @@
 [
-	{	
-		"id":"programming",
-		"name" : "Programming",
-		"childs" : [
-			{	
-				"id":"python_pinoyfreecoder",
-				"name" : "Python Programming - PinoyFreeCoder [Tagalog]",
-				"childs":[
-					{	
-						"type": "youtube",
-						"name": "0 Python Crash Course",
-						"code": "LQA4WSg011k"
-					},
-					{	
-						"type": "youtube",
-						"name" : "1 Python Django and MySQL (Set-up database and backend)",
-						"code": "F9KoDn_h4IY"
-					},
-					{	
-						"type": "youtube",
-						"name": "2 Python Django (Template and Inserting Data)",
-						"code": "HM-wpKxYLZw"
-					},
-					{	
-						"type": "youtube",
-						"name": "3 Python Django (Details, Insert and Delete)",
-						"code": "C3-wRS6WEvY"
-					},
-					{	
-						"type": "youtube",
-						"name": "4 Python Django (Search and Pagination)",
-						"code": "sjMtVgBubBc"
-					},
-					{	
-						"type": "youtube",
-						"name": "5 Python Django (Login, Authentication and Authorization)",
-						"code": "pZpV0MNl61c"
-					},
-					{	
-						"type": "youtube",
-						"name": "6 Python Django (Data relation, Adding Comment to User)",
-						"code": "23A4B-I7FKA"
-					}
-				]
-			},
-			{	
-				"id":"python_pinoyfreecoders",
-				"name" : "Python Programming - PinoyFreeCoder [Tagalog] 1",
-				"childs":[
-					{	
-						"type": "youtube",
-						"name": "0 Python Crash Course",
-						"code": "LQA4WSg011k"
-					},
-					{	
-						"type": "youtube",
-						"name" : "1 Python Django and MySQL (Set-up database and backend)",
-						"code": "F9KoDn_h4IY"
-					},
-					{	
-						"type": "youtube",
-						"name": "2 Python Django (Template and Inserting Data)",
-						"code": "HM-wpKxYLZw"
-					},
-					{	
-						"type": "youtube",
-						"name": "3 Python Django (Details, Insert and Delete)",
-						"code": "C3-wRS6WEvY"
-					},
-					{	
-						"type": "youtube",
-						"name": "4 Python Django (Search and Pagination)",
-						"code": "sjMtVgBubBc"
-					},
-					{	
-						"type": "youtube",
-						"name": "5 Python Django (Login, Authentication and Authorization)",
-						"code": "pZpV0MNl61c"
-					},
-					{	
-						"type": "youtube",
-						"name": "6 Python Django (Data relation, Adding Comment to User)",
-						"code": "23A4B-I7FKA"
-					}
-				]
-			}
-		]
-	},
-	{
-		"id": "personal_blog",
-		"name": "Personal Blogs",
-		"childs": []
-	}
+  {
+    "id": "programming",
+    "name": "Programming",
+    "childs": [
+      {
+        "id": "python_pinoyfreecoder",
+        "name": "Python - PinoyFreeCoder [Tagalog]",
+        "childs": [
+          {
+            "name": "0 Python Crash Course",
+            "code": "LQA4WSg011k"
+          },
+          {
+            "name": "1 Python Django and MySQL (Set-up database and backend)",
+            "code": "F9KoDn_h4IY"
+          },
+          {
+            "name": "2 Python Django (Template and Inserting Data)",
+            "code": "HM-wpKxYLZw"
+          },
+          {
+            "name": "3 Python Django (Details, Insert and Delete)",
+            "code": "C3-wRS6WEvY"
+          },
+          {
+            "name": "4 Python Django (Search and Pagination)",
+            "code": "sjMtVgBubBc"
+          },
+          {
+            "name": "5 Python Django (Login, Authentication and Authorization)",
+            "code": "pZpV0MNl61c"
+          },
+          {
+            "name": "6 Python Django (Data relation, Adding Comment to User)",
+            "code": "23A4B-I7FKA"
+          }
+        ]
+      }
+    ]
+  }
 ]

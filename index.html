@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" href="img/game_item_default.png" />
-    <link rel="stylesheet" href="css/vuetify-gfont.css">
-    <link rel="stylesheet" href="css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="css/vuetify.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <meta property="og:title" content="Red Mantis Portal">
-    <meta property="og:locale" content="en_US">
-    <meta name="description" content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads">
-    <meta property="og:description" content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads">
-    <link rel="canonical" href="https://eru123.github.io/">>
-    <meta property="og:url" content="https://eru123.github.io/">
-    <meta property="og:site_name" content="Red Mantis Portal">
-    <meta name="twitter:card" content="summary">
-    <meta property="twitter:title" content="Red Mantis Portal">
-    <meta name="twitter:site" content="@EruRoraito9">
+    <link rel="stylesheet" href="css/vuetify-gfont.css" />
+    <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="css/vuetify.min.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <meta property="og:title" content="Red Mantis Portal" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads"
+    />
+    <meta
+      property="og:description"
+      content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads"
+    />
+    <link rel="canonical" href="https://eru123.github.io/" />
+    >
+    <meta property="og:url" content="https://eru123.github.io/" />
+    <meta property="og:site_name" content="Red Mantis Portal" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Red Mantis Portal" />
+    <meta name="twitter:site" content="@EruRoraito9" />
   </head>
-  <body style="display: none;">
+  <body style="display: none">
     <div id="app">
       <v-app>
         <v-navigation-drawer v-model="drawer" app>
@@ -34,33 +44,38 @@
           </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar
-          app
-          color="primary"
-          dark
-        >
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar app color="primary" dark>
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+          ></v-app-bar-nav-icon>
           <v-toolbar-title>{{pageName}}</v-toolbar-title>
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
         <v-main>
-
           <!-- Provides the application the proper gutter -->
           <v-container fluid>
-
             <!-- If using vue-router -->
-            <router-view></router-view>
+            <router-view :key="$route.fullPath"></router-view>
           </v-container>
-           <v-footer v-if="sourcesFetchStatus.fetching" color="primary" padless dark app class="pl-2" style="font-size: .7em">Fetching Data ({{sourcesFetchStatus.fetch}}/{{sources.length}}) Failed: {{sourcesFetchStatus.error}}</v-footer>
+          <v-footer
+            v-if="sourcesFetchStatus.fetching"
+            color="primary"
+            padless
+            dark
+            app
+            class="pl-2"
+            style="font-size: 0.7em"
+            >Fetching Data ({{sourcesFetchStatus.fetch}}/{{sources.length}})
+            Failed: {{sourcesFetchStatus.error}}</v-footer
+          >
         </v-main>
-
       </v-app>
     </div>
 
     <script type="text/x-template" id="xdata">
       <div>
-        
+
         <!-- <v-expansion-panels accordion>
           <v-expansion-panel v-for="(item,i) in 5":key="i">
             <v-expansion-panel-header>Item</v-expansion-panel-header>
@@ -116,6 +131,7 @@
               ></v-carousel-item>
             </v-carousel>
             <div v-if="post.type=='youtube'" align="center">
+
               <iframe :width="post.width || '100%'" :height="post.height || '300px'" :src="post.link || ''" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
             <v-expansion-panels accordion v-if="post.type == 'expansion-panel'">
@@ -127,34 +143,49 @@
             <div v-if="post.type == 'loading'" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
             <v-list-item v-if="post.type == 'videos-categories'" v-for="item in post.items" :href="'#/videos/' + item.id">
               <v-list-item-action>
-                <v-icon>mdi-video</v-icon>
+                <v-icon>mdi-format-list-bulleted</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>{{item.name}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-expansion-panels accordion v-if="post.type == 'videos-playlists'">
+            <div v-if="post.type == 'back'">
+              <v-btn class="mb-4" :color="post.color || 'primary'" v-if="post.link" :href="post.link">{{post.name || 'Back'}}</v-btn>
+              <v-btn class="mb-4" :color="post.color || 'primary'" v-if="!post.link" @click="$router.back()">{{post.name || 'Back'}}</v-btn>
+            </div>
+            <v-expansion-panels accordion v-if="post.type == 'videos-playlists'" class="my-3">
               <v-expansion-panel v-for="item in post.items" :key="item.code">
-                <v-expansion-panel-header><b>{{item.name}}</b></v-expansion-panel-header>
+                <v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-expansion-panels accordion flat>
-                    <v-expansion-panel v-for="video in item.childs" :key="video.name">
-                      <v-expansion-panel-header class="px-1">{{video.name}}</v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <iframe v-if="video.type == 'youtube'" width="100%" height="300px" :src="'https://www.youtube.com/embed/' + video.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
+                  <v-list>
+                    <v-list-item v-for="video in item.childs" :key="video.name" :href="'#'+$router.currentRoute.fullPath + '/' + item.id + '/' + video.code" link>
+                      <v-list-item-icon>
+                        <v-icon color="red">mdi-youtube</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ video.name }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
+            <iframe v-if="post.type == 'videos-playback'" width="100%" height="350" :src="'https://www.youtube.com/embed/' + post.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div v-if="post.type == 'reload'" align="center">
+
+              <v-btn class="my-8" color="primary" @click="$router.go()">Reload</v-btn>
+            </div>
           </div>
         </div>
       </div>
     </script>
 
-
+    <!-- Production -->
     <script src="js/vue.min.js"></script>
+
+    <!-- Development -->
+    <!-- <script src="js/dev-vue.js"></script>  -->
+
     <script src="js/vue-router.js"></script>
     <script src="js/vuex.js"></script>
     <script src="js/vuetify.js"></script>
