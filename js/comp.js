@@ -30,7 +30,7 @@ function delay(seconds){
 	})
 }
 function imageChecker(str){
-	var regex = /(\.jpg|\.png)/gm;
+	var regex = /(\.jpg|\.png|\.gif|\.jpeg|\.img)/gm;
 	if(regex.exec(str)){
 		return true
 	}

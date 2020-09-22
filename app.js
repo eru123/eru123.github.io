@@ -1,6 +1,11 @@
 const lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto labore debitis suscipit esse, consectetur cum, vitae laborum aliquid facilis nam a accusantium perspiciatis maxime illo voluptate, dolorum numquam assumenda ducimus."
 const sample_yte = '<iframe width="560" height="315" src="https://www.youtube.com/embed/rpQhIdRwNMA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
 
+/*
+
+
+*/
+
 const sources = [
 	{
 		name: "books",
@@ -194,11 +199,166 @@ const app_data = [
 				template: "#xdata",
 				data(){
 					return {
-						posts: []
+						posts: [
+							{
+								type: "loading"
+							}
+						]
 					}
 				},
-				created(){
-					changeDocTitle("Videos")
+				created: async function(){
+					changeDocTitle("Videos - Categories");
+					while(store.state.sourcesFetchStatus.fetching){
+						await delay(.5)
+					}
+					this.retrieveCategories()
+				},
+				methods: {
+					retrieveCategories: async function(){
+						this.posts = []
+						sources.forEach(async (source) => {
+							if (source.name == "videos") {
+								var rtd = [];
+								source.links.forEach(async (link) => {
+									var xdta = await idbKeyval.get(link)
+									rtd = rtd.concat(xdta)
+								});
+								await delay(.2)
+								var dssdf = [];
+								rtd.forEach((x)=>{
+									var sdasd_D = true;
+									dssdf.forEach((y) => {
+										if (y.id == x.id) {sdasd_D = false}
+									})
+
+									if (sdasd_D) {dssdf.push(x)}
+								})
+								if (dssdf.length > 0) {
+									this.posts = [
+										{
+											type: "heading",
+											level: 1,
+											content: "Categories"
+										},
+										{
+											type: "videos-categories",
+											items: dssdf
+										}
+									]
+								} else {
+									this.posts = [
+										{
+											type: "heading",
+											level: 1,
+											content: "No video categories fetched."
+										}
+									]
+								}
+							}
+						});
+					}
+				}
+			}
+		}
+	},
+	{
+		route : {
+			name : "VideoPlaylists",
+			path : "/videos/:category",
+			component : {
+				template: "#xdata",
+				data(){
+					return {
+						posts: [
+							{
+								type: "loading"
+							}
+						]
+					}
+				},
+				created: async function(){
+					changeDocTitle("Videos - Playlists");
+					while(store.state.sourcesFetchStatus.fetching){
+						await delay(.5)
+					}
+					this.retrieveCategories()
+				},
+				methods: {
+					retrieveCategories: async function(){
+						this.posts = []
+						var posts = []
+						var videosCounter = 0;
+						sources.forEach(async (source) => {
+							if (source.name == "videos") {
+								var rtd = [];
+								source.links.forEach(async (link) => {
+									var xdta = await idbKeyval.get(link)
+									rtd = rtd.concat(xdta)
+								});
+								await delay(.2)
+								var dssdf = [];
+								rtd.forEach((x)=>{
+									var sdasd_D = true;
+									dssdf.forEach((y) => {
+										if (y.id == x.id) {sdasd_D = false}
+									})
+
+									if (sdasd_D) {dssdf.push(x)}
+								})
+								if (dssdf.length > 0) {
+									 // && dssdf[this.$route.params.category].items.length > 0
+									dssdf.forEach((x) => {
+										if (x.id == this.$route.params.category) {
+											this.posts.push({
+												type: "videos-categories",
+												items: [
+													{
+														id: "",
+														name: x.name
+													}
+												]
+											})
+											if (x.childs.length > 0) {
+												this.posts.push({
+													type: "heading",
+													level: 1,
+													content: "Playlists"
+												});
+												this.posts.push({
+													type: "videos-playlists",
+													name: x.name,
+													items: x.childs
+												});
+											} else {
+												this.posts.push({
+													type: "heading",
+													level: 1,
+													content: "No Playlists"
+												})
+											}
+										}
+									});
+									if (this.posts.length == 0) {
+										this.posts = [
+											{
+												type: "heading",
+												level: 1,
+												content: "No Playlists"
+											}
+										]
+									}
+								} else {
+									this.posts = [
+										{
+											type: "heading",
+											level: 1,
+											content: "No Playlists"
+										}
+									]
+								}
+							}
+						});
+					}
 				}
 			}
 		}

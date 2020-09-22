@@ -50,6 +50,23 @@
 
     <script type="text/x-template" id="xdata">
       <div>
+        
+        <!-- <v-expansion-panels accordion>
+          <v-expansion-panel v-for="(item,i) in 5":key="i">
+            <v-expansion-panel-header>Item</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              ff
+              <v-expansion-panels accordion flat>
+                <v-expansion-panel v-for="(item,i) in 5":key="i">
+                  <v-expansion-panel-header>Item</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels> -->
         <div v-if="posts || false">
           <div v-for="post in posts">
             <h1 v-if="post.type == 'heading' && post.level == 1">{{post.content}}</h1>
@@ -97,7 +114,30 @@
                 <v-expansion-panel-content>{{item.content}}</v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
-            <div v-if="post.type == 'loading'" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate  ></v-progress-circular></div>
+            <div v-if="post.type == 'loading'" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
+            <v-list-item v-if="post.type == 'videos-categories'" v-for="item in post.items" :href="'#/videos/' + item.id">
+              <v-list-item-action>
+                <v-icon>mdi-video</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{item.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-expansion-panels accordion v-if="post.type == 'videos-playlists'">
+              <v-expansion-panel v-for="item in post.items" :key="item.code">
+                <v-expansion-panel-header><b>{{item.name}}</b></v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-expansion-panels accordion flat>
+                    <v-expansion-panel v-for="video in item.childs" :key="video.name">
+                      <v-expansion-panel-header class="px-1">{{video.name}}</v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <iframe v-if="video.type == 'youtube'" width="100%" height="300px" :src="'https://www.youtube.com/embed/' + video.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </div>
         </div>
       </div>
