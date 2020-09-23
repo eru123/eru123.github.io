@@ -173,7 +173,7 @@
             <iframe v-if="post.type == 'videos-playback'" width="100%" height="350" :src="'https://www.youtube.com/embed/' + post.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <div v-if="post.type == 'reload'" align="center">
 
-              <v-btn class="my-8" color="primary" @click="$router.go()">Reload</v-btn>
+              <v-btn class="my-8" color="primary" @click="location.reload()">Reload</v-btn>
             </div>
           </div>
         </div>

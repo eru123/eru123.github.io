@@ -7,22 +7,28 @@ const sources = [
   {
     name: "books",
     links: [
-      "api/bookshelf.json",
+      // "api/bookshelf.json",
       "https://eru123.github.io/api/bookshelf.json",
     ],
   },
   {
     name: "videos",
-    links: ["api/videos.json", "https://eru123.github.io/api/videos.json"],
+    links: [
+      // "api/videos.json", 
+      "https://eru123.github.io/api/videos.json"
+    ],
   },
   {
     name: "articles",
-    links: ["api/articles.json", "https://eru123.github.io/api/articles.json"],
+    links: [
+      // "api/articles.json", 
+      "https://eru123.github.io/api/articles.json"
+    ],
   },
   {
     name: "announcements",
     links: [
-      "api/announcements.json",
+      // "api/announcements.json",
       "https://eru123.github.io/api/announcements.json",
     ],
   },
@@ -30,13 +36,25 @@ const sources = [
     name: "reddit",
     links: [
       "https://www.reddit.com/r/PampamilyangPaoLUL.json",
+      "https://www.reddit.com/r/goodanimemes.json",
+      "https://www.reddit.com/r/Animemes.json",
+      "https://www.reddit.com/r/goodanimememes.json",
       "https://www.reddit.com/r/ProgrammerHumor.json",
+      "https://www.reddit.com/r/programmingmemes.json",
       "https://www.reddit.com/r/wholesomememes.json",
-      "https://www.reddit.com/r/sarcasm.json",
       "https://www.reddit.com/r/ComedyCemetery.json",
       "https://www.reddit.com/r/sadcringe.json",
       "https://www.reddit.com/r/terriblefacebookmemes.json",
       "https://www.reddit.com/r/im14andthisisdeep.json",
+      "https://www.reddit.com/r/pewdiepie.json",
+      "https://www.reddit.com/r/PewdiepieSubmissions.json",
+      "https://www.reddit.com/r/meme.json",
+      "https://www.reddit.com/r/memes.json",
+      "https://www.reddit.com/r/dankmemes.json",
+      "https://www.reddit.com/r/redditmoment.json",
+      "https://www.reddit.com/r/bestmemes.json",
+      "https://www.reddit.com/r/Cringetopia.json",
+      "https://www.reddit.com/r/ForShub.json",
     ],
   },
 ];
@@ -460,6 +478,68 @@ const app_data = [
                 content:
                   "A free and open-source platform that provides collection of Web Services, Informations, Videos, Books and Entertainments. Our mission is to give free and reliable information and expand the open-source community to help everyone in their careers specially students and self-taught developers.",
               },
+              {
+                type: "heading",
+                level: 1,
+                content: "Support",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/facebook_logo.png",
+                title: "Facebook",
+                subtitle: "@lighty262",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/instagram_logo.png",
+                title: "Instagram",
+                subtitle: "@yeoligo123",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/github_logo.png",
+                title: "Github",
+                subtitle: "@eru123",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/gmail_logo.png",
+                title: "Gmail",
+                subtitle: "yeoligoakino@gmail.com",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                icon: "mdi-phone",
+                title: "Mobile Phone",
+                subtitle: "(+63) 936 852 3483",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/patreon_logo.png",
+                title: "Patreon",
+                subtitle: "patreon.com/JAquino",
+              },
+              {
+                type: "card",
+                avatar: true,
+                my: 4,
+                img: "img/paypal_logo.png",
+                title: "PayPal",
+                subtitle: "paypal.me/ja1030",
+              },
+            
             ],
           };
         },
@@ -469,6 +549,7 @@ const app_data = [
       },
     },
   },
+  /*
   {
     page: "Contact us",
     icon: "mdi-email",
@@ -575,4 +656,5 @@ const app_data = [
       },
     },
   },
+  */
 ];
