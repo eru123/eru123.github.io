@@ -7,28 +7,28 @@ const sources = [
   {
     name: "books",
     links: [
-      // "api/bookshelf.json",
+      "api/bookshelf.json",
       "https://eru123.github.io/api/bookshelf.json",
     ],
   },
   {
     name: "videos",
     links: [
-      // "api/videos.json", 
+      "api/videos.json", 
       "https://eru123.github.io/api/videos.json"
     ],
   },
   {
     name: "articles",
     links: [
-      // "api/articles.json", 
+      "api/articles.json", 
       "https://eru123.github.io/api/articles.json"
     ],
   },
   {
     name: "announcements",
     links: [
-      // "api/announcements.json",
+      "api/announcements.json",
       "https://eru123.github.io/api/announcements.json",
     ],
   },
@@ -189,11 +189,69 @@ const app_data = [
         template: "#xdata",
         data() {
           return {
-            posts: [],
+            posts: [
+              {
+                type:"loading"
+              }
+            ],
           };
         },
-        created() {
+        created: async function() {
           changeDocTitle("Books");
+
+          while (store.state.sourcesFetchStatus.fetching) {
+            await delay(0.5);
+          }
+          
+          await this.retrieveBooks()
+        },
+        methods: {
+          retrieveBooks: async function () {
+            this.posts = [];
+
+            var books = await this.bookList();
+
+            if (books.length > 0) {
+
+              var recommendedBooks = await this.randomBookList(5);
+
+              console.log(recommendedBooks)
+              this.posts.push({
+                type: "heading",
+                level: 3,
+                content: "Recommended"
+              })
+              this.posts.push({
+                type: "books-recommended",
+                items: recommendedBooks
+              })
+            } else {
+              this.posts = [
+                {
+                  type: "paragraph",
+                  alignment: "center",
+                  content: "No Data"                  
+                },
+                {
+                  type: "reload"
+                }
+              ]
+            }
+            
+          },
+          bookList: async function(){
+            var links = getLinksFromSource(sources, "books");
+            var data = getDataFromLinks(links, "link");
+            await delay(0.1);
+            return data;
+          },
+          randomBookList: async function(show = 10){
+            var books = await this.bookList()
+            return shuffleArray(books).slice(0,show)
+          },
+          openBook: function(title,link){
+            this.$store.commit("openBrowser",{title:title,link:link})
+          }
         },
       },
     },
@@ -304,7 +362,6 @@ const app_data = [
               data.forEach((x) => {
                 if (x.id == this.$route.params.category) {
                   if (x.childs && x.childs.length > 0) {
-                    console.log(x.childs);
                     this.posts.push({
                       type: "videos-playlists",
                       items: x.childs,
@@ -460,7 +517,6 @@ const app_data = [
     icon: "mdi-alpha-a-circle",
     route: {
       name: "About",
-      icon: "mdi-info",
       path: "/about",
       component: {
         template: "#xdata",
@@ -549,63 +605,18 @@ const app_data = [
       },
     },
   },
-  /*
   {
-    page: "Contact us",
-    icon: "mdi-email",
     route: {
-      name: "ContactUs",
-      path: "/contactus",
+      name: "InvalidLink",
+      path: "/*",
       component: {
         template: "#xdata",
         data() {
           return {
             posts: [
               {
-                type: "heading",
-                level: 1,
-                content: "Contact us on",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/facebook_logo.png",
-                title: "Facebook",
-                subtitle: "@lighty262",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/instagram_logo.png",
-                title: "Instagram",
-                subtitle: "@yeoligo123",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/github_logo.png",
-                title: "Github",
-                subtitle: "@eru123",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/gmail_logo.png",
-                title: "Gmail",
-                subtitle: "yeoligoakino@gmail.com",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                icon: "mdi-phone",
-                title: "Phone",
-                subtitle: "(+63) 936 852 3483",
-              },
+                type: 404
+              }
             ],
           };
         },
@@ -614,47 +625,5 @@ const app_data = [
         },
       },
     },
-  },
-  {
-    page: "Donate",
-    icon: "mdi-heart",
-    route: {
-      name: "Donate",
-      path: "/donate",
-      component: {
-        template: "#xdata",
-        data() {
-          return {
-            posts: [
-              {
-                type: "heading",
-                level: 1,
-                content: "Send Coffee on",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/patreon_logo.png",
-                title: "Patreon",
-                subtitle: "patreon.com/JAquino",
-              },
-              {
-                type: "card",
-                avatar: true,
-                my: 4,
-                img: "img/paypal_logo.png",
-                title: "PayPal",
-                subtitle: "paypal.me/ja1030",
-              },
-            ],
-          };
-        },
-        created() {
-          changeDocTitle("Red Mantis");
-        },
-      },
-    },
-  },
-  */
+  }
 ];

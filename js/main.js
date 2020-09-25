@@ -100,6 +100,9 @@ new Vue({
         }
       }
     },
+    closeBrowser:function(){
+      this.$store.commit('closeBrowser')
+    }
   },
   store,
   router,

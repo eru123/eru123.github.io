@@ -21,7 +21,6 @@
       content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads"
     />
     <link rel="canonical" href="https://eru123.github.io/" />
-    >
     <meta property="og:url" content="https://eru123.github.io/" />
     <meta property="og:site_name" content="Red Mantis Portal" />
     <meta name="twitter:card" content="summary" />
@@ -29,8 +28,9 @@
     <meta name="twitter:site" content="@EruRoraito9" />
   </head>
   <body style="display: none">
+
     <div id="app">
-      <v-app>
+      <v-app v-if="!browser">
         <v-navigation-drawer v-model="drawer" app>
           <v-list dense>
             <v-list-item v-for="item in menu" link :href="item.link">
@@ -45,9 +45,7 @@
         </v-navigation-drawer>
 
         <v-app-bar app color="primary" dark>
-          <v-app-bar-nav-icon
-            @click.stop="drawer = !drawer"
-          ></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title>{{pageName}}</v-toolbar-title>
         </v-app-bar>
 
@@ -67,15 +65,25 @@
             class="pl-2"
             style="font-size: 0.7em"
             >Fetching Data ({{sourcesFetchStatus.fetch}}/{{sources.length}})
-            Failed: {{sourcesFetchStatus.error}}</v-footer
-          >
+            Failed: {{sourcesFetchStatus.error}}
+          </v-footer>
+        </v-main>
+      </v-app>
+      <v-app v-if="browser && browserLink">
+        <v-app-bar app dense color="primary" dark>
+          <v-btn icon @click="closeBrowser">
+            <v-icon color="#fff">mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{browserTitle || ''}}</v-toolbar-title>
+        </v-app-bar>
+        <v-main>
+          <iframe :src="browserLink" width="100%" height="100%" frameborder="0"></iframe>
         </v-main>
       </v-app>
     </div>
 
     <script type="text/x-template" id="xdata">
       <div>
-
         <!-- <v-expansion-panels accordion>
           <v-expansion-panel v-for="(item,i) in 5":key="i">
             <v-expansion-panel-header>Item</v-expansion-panel-header>
@@ -174,6 +182,21 @@
             <div v-if="post.type == 'reload'" align="center">
 
               <v-btn class="my-8" color="primary" @click="location.reload()">Reload</v-btn>
+            </div>
+            <div v-if="post.type == 404" align="center">
+              <h3 class="my-8">The link you are trying to access is invalid or the page is deleted.</h3>
+              <v-btn outlined color="primary" @click="router.push('/home')">Home</v-btn>
+            </div>
+            <div v-if="post.type == 'books-recommended'">
+              <v-list-item two-line v-for="item in post.items" link @click="openBook(item.name,item.link)">
+                <v-list-item-content>
+                  <v-list-item-title>{{item.name}}</v-list-item-title>
+                  <v-list-item-subtitle style="text-transform: capitalize">
+                    {{item.category || 'No Category'}}
+                    <small v-for="tag in item.tags" style="color:#1e90ff;margin-left:4px"> #{{tag}} </small>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
             </div>
           </div>
         </div>
