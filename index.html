@@ -122,7 +122,12 @@
                   <v-list-item-subtitle v-if="post.subtitle">{{post.subtitle}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-              <v-card-title v-if="!post.avatar && post.title">{{post.title}}</v-card-title>
+              <v-card-title v-if="!post.avatar && post.title">
+                <span class="headline">{{post.title}}</span>
+                <v-spacer></v-spacer>
+                <v-btn icon v-if="post.download" @click="download(post.download)"><v-icon link >mdi-download</v-icon></v-btn>
+                </v-menu>
+              </v-card-title>
               <v-card-subtitle v-if="!post.avatar && post.subtitle">{{post.subtitle}}</v-card-subtitle>
               <v-card-text v-if="post.content">{{post.content}}</v-card-text>
               <v-img v-if="post.imageUrl" :src="post.imageUrl"></v-img>

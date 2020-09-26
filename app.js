@@ -440,13 +440,13 @@ const app_data = [
               {
                 type: "loading",
               },
-            ],
+            ]
           };
         },
         created: async function () {
           changeDocTitle("Memes");
           while (store.state.fetching) {
-            await delay(0.5);
+            await delay(0.1);
           }
           this.refreshMemes();
         },
@@ -455,7 +455,6 @@ const app_data = [
             this.posts = [];
             var reddit = [];
             var final = [];
-            var memesCounter = 0;
             if (localStorage.getItem("source")) {
               var subr = JSON.parse(localStorage.getItem("source")).memes
 
@@ -475,14 +474,13 @@ const app_data = [
                     reddit.push(d.data.children)
                   }
                 }
-                console.log(reddit)
                 var totalPosts = 0;
                 var totalImages = 0
 
                 for (var i = 0; i < 31; i++) {
                   RedMantis.foreach(reddit,function(r){
-                    totalPosts++;
                     if (r[i] && r[i].data) {
+                      totalPosts++;
                       var d = r[i].data;
                       var ttl = d.title || null
                       var img = d.url_overridden_by_dest || d.thumbnail || null
@@ -495,6 +493,7 @@ const app_data = [
                           title: ttl,
                           subtitle: subtl,
                           imageUrl: img,
+                          download: img,
                           content: txt
                         })
                       }
@@ -504,6 +503,7 @@ const app_data = [
 
                 if (final.length > 0) {
                   this.posts = final
+                  console.log("[MEMES] Showing " + totalImages + " of " + totalPosts + " memes.")
                 } else {
                   this.posts = [
                     {
@@ -527,63 +527,26 @@ const app_data = [
                 }
               ]
             }
-            
-
-            
-
-            // await sources.forEach(async (source) => {
-            //   if (source.name == "reddit") {
-            //     var rtd = [];
-            //     await source.links.forEach(async (link) => {
-            //       var xdta = await idbKeyval.get(link);
-            //       if (typeof xdta == "object") {
-            //         var xdtb = [];
-            //         await xdta.data.children.forEach(async (xChild) => {
-            //           var title = xChild.data.title || null;
-            //           var subtitle = xChild.data.subreddit || null;
-            //           var imageUrl = xChild.data.url_overridden_by_dest || null;
-            //           var content = xChild.data.selftext || null;
-            //           if (imageChecker(imageUrl)) {
-            //             await xdtb.push({
-            //               type: "card",
-            //               title: xChild.data.title || null,
-            //               subtitle: xChild.data.subreddit || null,
-            //               imageUrl: xChild.data.url_overridden_by_dest || null,
-            //               content: xChild.data.selftext || null,
-            //             });
-            //           }
-            //         });
-
-            //         await rtd.push(xdtb);
-            //         memesCounter = memesCounter + xdtb.length;
-            //       }
-            //     });
-            //     await delay(0.2);
-            //     for (var i = 0; i < 30; i++) {
-            //       for (dt in rtd) {
-            //         if (rtd[dt][i]) {
-            //           reddit.push(rtd[dt][i]);
-            //         }
-            //       }
-            //     }
-            //     this.posts = reddit;
-            //   }
-            // });
-            // await delay(0.3);
-            // console.log("[MEMES] " + memesCounter + " image links fetched.");
-            // if (this.posts.length == 0) {
-            //   this.posts = [
-            //     {
-            //       type: "paragraph",
-            //       alignment: "center",
-            //       content: "No data",
-            //     },
-            //     {
-            //       type: "reload",
-            //     },
-            //   ];
-            // }
           },
+          forceFileDownload(response,filename){
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', filename) //or any other extension
+            document.body.appendChild(link)
+            link.click()
+          },
+          download(url){
+            axios({
+              method: 'get',
+              url: url,
+              responseType: 'arraybuffer'
+            })
+            .then(response => {
+              console.log(response)
+            })
+            .catch(() => alert("Check you Internet and Enable CORS"))
+          }
         },
       },
     },

@@ -175,12 +175,19 @@
 
   	return res;
   }
-
+  function getFileNameFromUrl(url){
+    if (typeof url === 'string') {
+      var spl = url.split("/")
+      return spl.pop()
+    }
+    return url
+  }
 	return {
 		online: isOnline,
     foreach: forEachValue,
 		source: getFromSource,
 		data: getAppData,
-    imgChk: imageChecker
+    imgChk: imageChecker,
+    getFileName: getFileNameFromUrl
 	}
 })));
