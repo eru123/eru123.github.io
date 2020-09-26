@@ -33,72 +33,19 @@ new Vue({
     document.body.style.display = "block";
     changeDocTitle("App");
     this.fetchSource();
-    setInterval(() => this.fetchSource(), 1000 * 60 * 10);
   },
   methods: {
     fetchSource: function () {
-      this.sources = [];
-      this.sourcesFetchStatus.fetch = 0;
-      this.sourcesFetchStatus.error = 0;
-      if (this.sourcesFetchStatus.toBeFetch) {
-        try {
-          sources.forEach((category) => {
-            if (category.links && category.links.length > 0) {
-              category.links.forEach((link) => {
-                this.sources.push(link);
-              });
-            }
-          });
-        } catch (e) {
-          console.error("[SOURCES] Failed to compile.");
-        }
-
-        if (this.sources.length > 0) {
-          console.log(
-            "[SOURCES] Fetching " + this.sources.length + " sources."
-          );
-          this.sourcesFetchStatus.fetching = true;
-          this.sources.forEach((link) => {
-            fetch(link)
-              .then((r) => {
-                return r.json();
-              })
-              .then(async (r) => {
-                this.sourcesFetchStatus.fetch =
-                  this.sourcesFetchStatus.fetch + 1;
-                await idbKeyval.del(link);
-                await delay(0.1);
-                await idbKeyval.set(link, r);
-              })
-              .catch((e) => {
-                this.sourcesFetchStatus.error =
-                  this.sourcesFetchStatus.error + 1;
-              })
-              .finally(async () => {
-                if (
-                  this.sourcesFetchStatus.error +
-                    this.sourcesFetchStatus.fetch ==
-                  this.sources.length
-                ) {
-                  console.log(
-                    "[SOURCES] " +
-                      this.sourcesFetchStatus.fetch +
-                      " source fetched, " +
-                      this.sourcesFetchStatus.error +
-                      " source failed."
-                  );
-                  await delay(2);
-                  this.sourcesFetchStatus.fetching = false;
-                }
-                store.state.sources = this.sources;
-                store.state.sourcesFetchStatus = this.sourcesFetchStatus;
-                store.state.sources = this.sources;
-              });
-          });
-        } else {
-          console.warn("[SOURCES] No source to fetch.");
-        }
-      }
+      this.$store.commit('startFetching');
+      RedMantis.source({main:["https://eru123.github.com/api/sources.json"],backup:["api/sources.json"]})
+        .then(a => {
+          this.$store.commit('source',a)
+          RedMantis.data(a)
+            .then(b => {
+              this.$store.commit('data',b)
+              this.$store.commit('stopFetching')
+            })
+        })
     },
     closeBrowser:function(){
       this.$store.commit('closeBrowser')

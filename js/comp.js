@@ -9,13 +9,9 @@ const store = new Vuex.Store({
     drawer: null,
     pageName: "Application",
     menu: [],
-    sources: [],
-    sourcesFetchStatus: {
-      fetching: false,
-      fetch: 0,
-      error: 0,
-      toBeFetch: true,
-    },
+    sources: {},
+    data: {},
+    fetching: true,
   },
   mutations: {
     openBrowser(state,value){
@@ -27,6 +23,18 @@ const store = new Vuex.Store({
       state.browser = false;
       state.browserLink = null
       state.browserTitle = null
+    },
+    source(state,value){
+      state.source = value
+    },
+    data(state,value){
+      state.data = value
+    },
+    stopFetching(state){
+      state.fetching = false;
+    },
+    startFetching(state){
+      state.fetching = true;
     }
   }
 });
@@ -61,37 +69,6 @@ function objectsAreSame(x, y) {
     }
   }
   return objectsAreSame;
-}
-function getLinksFromSource(src, name) {
-  var res = [];
-  src.forEach((e) => {
-    if (e.name == name) {
-      res = e.links;
-    }
-  });
-  return res;
-}
-function getDataFromLinks(links, key = null) {
-  var res = [];
-  links.forEach(async (link) => {
-    var cp = res;
-    await idbKeyval.get(link).then((e) => {
-      e.forEach((f) => {
-        var b = true;
-        if (key) {
-          res.forEach((d) => {
-            if (d[key] == f[key]) {
-              b = false;
-            }
-          });
-        }
-        if (b) {
-          res.push(f);
-        }
-      });
-    });
-  });
-  return res;
 }
 function shuffleArray(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;

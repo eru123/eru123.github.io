@@ -7,54 +7,54 @@ const sources = [
   {
     name: "books",
     links: [
-      "api/bookshelf.json",
-      "https://eru123.github.io/api/bookshelf.json",
+      "api/books.json",
+      // "https://eru123.github.io/api/books.json",
     ],
   },
   {
     name: "videos",
     links: [
       "api/videos.json", 
-      "https://eru123.github.io/api/videos.json"
+      // "https://eru123.github.io/api/videos.json"
     ],
   },
   {
     name: "articles",
     links: [
       "api/articles.json", 
-      "https://eru123.github.io/api/articles.json"
+      // "https://eru123.github.io/api/articles.json"
     ],
   },
   {
-    name: "announcements",
+    name: "announce",
     links: [
-      "api/announcements.json",
-      "https://eru123.github.io/api/announcements.json",
+      "api/announce.json",
+      // "https://eru123.github.io/api/announce.json",
     ],
   },
   {
     name: "reddit",
     links: [
-      "https://www.reddit.com/r/PampamilyangPaoLUL.json",
-      "https://www.reddit.com/r/goodanimemes.json",
-      "https://www.reddit.com/r/Animemes.json",
-      "https://www.reddit.com/r/goodanimememes.json",
-      "https://www.reddit.com/r/ProgrammerHumor.json",
-      "https://www.reddit.com/r/programmingmemes.json",
-      "https://www.reddit.com/r/wholesomememes.json",
-      "https://www.reddit.com/r/ComedyCemetery.json",
-      "https://www.reddit.com/r/sadcringe.json",
-      "https://www.reddit.com/r/terriblefacebookmemes.json",
-      "https://www.reddit.com/r/im14andthisisdeep.json",
-      "https://www.reddit.com/r/pewdiepie.json",
-      "https://www.reddit.com/r/PewdiepieSubmissions.json",
-      "https://www.reddit.com/r/meme.json",
-      "https://www.reddit.com/r/memes.json",
-      "https://www.reddit.com/r/dankmemes.json",
-      "https://www.reddit.com/r/redditmoment.json",
-      "https://www.reddit.com/r/bestmemes.json",
-      "https://www.reddit.com/r/Cringetopia.json",
-      "https://www.reddit.com/r/ForShub.json",
+      // "https://www.reddit.com/r/PampamilyangPaoLUL.json",
+      // "https://www.reddit.com/r/goodanimemes.json",
+      // "https://www.reddit.com/r/Animemes.json",
+      // "https://www.reddit.com/r/goodanimememes.json",
+      // "https://www.reddit.com/r/ProgrammerHumor.json",
+      // "https://www.reddit.com/r/programmingmemes.json",
+      // "https://www.reddit.com/r/wholesomememes.json",
+      // "https://www.reddit.com/r/ComedyCemetery.json",
+      // "https://www.reddit.com/r/sadcringe.json",
+      // "https://www.reddit.com/r/terriblefacebookmemes.json",
+      // "https://www.reddit.com/r/im14andthisisdeep.json",
+      // "https://www.reddit.com/r/pewdiepie.json",
+      // "https://www.reddit.com/r/PewdiepieSubmissions.json",
+      // "https://www.reddit.com/r/meme.json",
+      // "https://www.reddit.com/r/memes.json",
+      // "https://www.reddit.com/r/dankmemes.json",
+      // "https://www.reddit.com/r/redditmoment.json",
+      // "https://www.reddit.com/r/bestmemes.json",
+      // "https://www.reddit.com/r/Cringetopia.json",
+      // "https://www.reddit.com/r/ForShub.json",
     ],
   },
 ];
@@ -209,41 +209,41 @@ const app_data = [
           retrieveBooks: async function () {
             this.posts = [];
 
-            var books = await this.bookList();
+            // var books = await this.bookList();
 
-            if (books.length > 0) {
+            // if (books.length > 0) {
 
-              var recommendedBooks = await this.randomBookList(5);
+            //   var recommendedBooks = await this.randomBookList(5);
 
-              console.log(recommendedBooks)
-              this.posts.push({
-                type: "heading",
-                level: 3,
-                content: "Recommended"
-              })
-              this.posts.push({
-                type: "books-recommended",
-                items: recommendedBooks
-              })
-            } else {
-              this.posts = [
-                {
-                  type: "paragraph",
-                  alignment: "center",
-                  content: "No Data"                  
-                },
-                {
-                  type: "reload"
-                }
-              ]
-            }
+            //   console.log(recommendedBooks)
+            //   this.posts.push({
+            //     type: "heading",
+            //     level: 3,
+            //     content: "Recommended"
+            //   })
+            //   this.posts.push({
+            //     type: "books-recommended",
+            //     items: recommendedBooks
+            //   })
+            // } else {
+            //   this.posts = [
+            //     {
+            //       type: "paragraph",
+            //       alignment: "center",
+            //       content: "No Data"                  
+            //     },
+            //     {
+            //       type: "reload"
+            //     }
+            //   ]
+            // }
             
           },
           bookList: async function(){
-            var links = getLinksFromSource(sources, "books");
-            var data = getDataFromLinks(links, "link");
-            await delay(0.1);
-            return data;
+            // var links = getLinksFromSource(sources, "books");
+            // var data = getDataFromLinks(links, "link");
+            // await delay(0.1);
+            // return data;
           },
           randomBookList: async function(show = 10){
             var books = await this.bookList()
@@ -286,33 +286,33 @@ const app_data = [
           retrieveCategories: async function () {
             this.posts = [];
 
-            var links = getLinksFromSource(sources, "videos");
-            var data = getDataFromLinks(links, "id");
-            await delay(0.1);
-            if (data.length > 0) {
-              this.posts = [
-                {
-                  type: "heading",
-                  level: 1,
-                  content: "Categories",
-                },
-                {
-                  type: "videos-categories",
-                  items: data,
-                },
-              ];
-            } else {
-              this.posts = [
-                {
-                  type: "paragraph",
-                  alignment: "center",
-                  content: "No video categories fetched.",
-                },
-                {
-                  type: "reload",
-                },
-              ];
-            }
+            // var links = getLinksFromSource(sources, "videos");
+            // var data = getDataFromLinks(links, "id");
+            // await delay(0.1);
+            // if (data.length > 0) {
+            //   this.posts = [
+            //     {
+            //       type: "heading",
+            //       level: 1,
+            //       content: "Categories",
+            //     },
+            //     {
+            //       type: "videos-categories",
+            //       items: data,
+            //     },
+            //   ];
+            // } else {
+            //   this.posts = [
+            //     {
+            //       type: "paragraph",
+            //       alignment: "center",
+            //       content: "No video categories fetched.",
+            //     },
+            //     {
+            //       type: "reload",
+            //     },
+            //   ];
+            // }
           },
         },
       },
@@ -355,39 +355,39 @@ const app_data = [
               },
             ];
 
-            var links = getLinksFromSource(sources, "videos");
-            var data = getDataFromLinks(links, "id");
-            await delay(0.1);
-            if (data.length > 0) {
-              data.forEach((x) => {
-                if (x.id == this.$route.params.category) {
-                  if (x.childs && x.childs.length > 0) {
-                    this.posts.push({
-                      type: "videos-playlists",
-                      items: x.childs,
-                    });
-                  } else {
-                    this.posts.push({
-                      type: "paragraph",
-                      alignment: "left",
-                      content: "No Playlists",
-                    });
-                    this.posts.push({
-                      type: "reload",
-                    });
-                  }
-                }
-              });
-            } else {
-              this.posts.push({
-                type: "paragraph",
-                alignment: "left",
-                content: "No Playlists",
-              });
-              this.posts.push({
-                type: "reload",
-              });
-            }
+            // var links = getLinksFromSource(sources, "videos");
+            // var data = getDataFromLinks(links, "id");
+            // await delay(0.1);
+            // if (data.length > 0) {
+            //   data.forEach((x) => {
+            //     if (x.id == this.$route.params.category) {
+            //       if (x.childs && x.childs.length > 0) {
+            //         this.posts.push({
+            //           type: "videos-playlists",
+            //           items: x.childs,
+            //         });
+            //       } else {
+            //         this.posts.push({
+            //           type: "paragraph",
+            //           alignment: "left",
+            //           content: "No Playlists",
+            //         });
+            //         this.posts.push({
+            //           type: "reload",
+            //         });
+            //       }
+            //     }
+            //   });
+            // } else {
+            //   this.posts.push({
+            //     type: "paragraph",
+            //     alignment: "left",
+            //     content: "No Playlists",
+            //   });
+            //   this.posts.push({
+            //     type: "reload",
+            //   });
+            // }
           },
         },
       },
@@ -445,68 +445,144 @@ const app_data = [
         },
         created: async function () {
           changeDocTitle("Memes");
-          while (store.state.sourcesFetchStatus.fetching) {
+          while (store.state.fetching) {
             await delay(0.5);
           }
           this.refreshMemes();
         },
         methods: {
-          refreshMemes: async function () {
+          refreshMemes: function () {
             this.posts = [];
             var reddit = [];
+            var final = [];
             var memesCounter = 0;
-            await sources.forEach(async (source) => {
-              if (source.name == "reddit") {
-                var rtd = [];
-                await source.links.forEach(async (link) => {
-                  var xdta = await idbKeyval.get(link);
-                  if (typeof xdta == "object") {
-                    var xdtb = [];
-                    await xdta.data.children.forEach(async (xChild) => {
-                      var title = xChild.data.title || null;
-                      var subtitle = xChild.data.subreddit || null;
-                      var imageUrl = xChild.data.url_overridden_by_dest || null;
-                      var content = xChild.data.selftext || null;
-                      if (imageChecker(imageUrl)) {
-                        await xdtb.push({
-                          type: "card",
-                          title: xChild.data.title || null,
-                          subtitle: xChild.data.subreddit || null,
-                          imageUrl: xChild.data.url_overridden_by_dest || null,
-                          content: xChild.data.selftext || null,
-                        });
-                      }
-                    });
+            if (localStorage.getItem("source")) {
+              var subr = JSON.parse(localStorage.getItem("source")).memes
 
-                    await rtd.push(xdtb);
-                    memesCounter = memesCounter + xdtb.length;
+              if (Array.isArray(subr)){
+                this.posts = [
+                  {
+                    type: "heading",
+                    level: 1,
+                    content: "May post na wait kalang ha! love you!"
                   }
-                });
-                await delay(0.2);
-                for (var i = 0; i < 30; i++) {
-                  for (dt in rtd) {
-                    if (rtd[dt][i]) {
-                      reddit.push(rtd[dt][i]);
-                    }
+                ]
+
+                for (r in subr){
+                  var sr = subr[r];
+                  if (localStorage.getItem(sr)) {
+                    var d = JSON.parse(localStorage.getItem(sr))
+                    reddit.push(d.data.children)
                   }
                 }
-                this.posts = reddit;
+                console.log(reddit)
+                var totalPosts = 0;
+                var totalImages = 0
+
+                for (var i = 0; i < 31; i++) {
+                  RedMantis.foreach(reddit,function(r){
+                    totalPosts++;
+                    if (r[i] && r[i].data) {
+                      var d = r[i].data;
+                      var ttl = d.title || null
+                      var img = d.url_overridden_by_dest || d.thumbnail || null
+                      var subtl = d.subreddit || d.data.title  || null
+                      var txt = d.selftext || null
+                      if (RedMantis.imgChk(img)) {
+                        totalImages++;
+                        final.push({
+                          type: "card",
+                          title: ttl,
+                          subtitle: subtl,
+                          imageUrl: img,
+                          content: txt
+                        })
+                      }
+                    }
+                  })
+                }
+
+                if (final.length > 0) {
+                  this.posts = final
+                } else {
+                  this.posts = [
+                    {
+                      type: "paragraph",
+                      alignment: "center",
+                      content: "No data, try restarting the app to retrieve new posts"
+                    },
+                    {
+                      type: "restart"
+                    }
+                  ]
+                }
+
               }
-            });
-            await delay(0.3);
-            console.log("[MEMES] " + memesCounter + " image links fetched.");
-            if (this.posts.length == 0) {
+            } else {
               this.posts = [
                 {
                   type: "paragraph",
                   alignment: "center",
-                  content: "No data",
-                },
-                {
-                  type: "reload",
-                },
-              ];
+                  content: "No data, try restarting the app to retrieve new posts"
+                }
+              ]
             }
+            
+
+            
+
+            // await sources.forEach(async (source) => {
+            //   if (source.name == "reddit") {
+            //     var rtd = [];
+            //     await source.links.forEach(async (link) => {
+            //       var xdta = await idbKeyval.get(link);
+            //       if (typeof xdta == "object") {
+            //         var xdtb = [];
+            //         await xdta.data.children.forEach(async (xChild) => {
+            //           var title = xChild.data.title || null;
+            //           var subtitle = xChild.data.subreddit || null;
+            //           var imageUrl = xChild.data.url_overridden_by_dest || null;
+            //           var content = xChild.data.selftext || null;
+            //           if (imageChecker(imageUrl)) {
+            //             await xdtb.push({
+            //               type: "card",
+            //               title: xChild.data.title || null,
+            //               subtitle: xChild.data.subreddit || null,
+            //               imageUrl: xChild.data.url_overridden_by_dest || null,
+            //               content: xChild.data.selftext || null,
+            //             });
+            //           }
+            //         });
+
+            //         await rtd.push(xdtb);
+            //         memesCounter = memesCounter + xdtb.length;
+            //       }
+            //     });
+            //     await delay(0.2);
+            //     for (var i = 0; i < 30; i++) {
+            //       for (dt in rtd) {
+            //         if (rtd[dt][i]) {
+            //           reddit.push(rtd[dt][i]);
+            //         }
+            //       }
+            //     }
+            //     this.posts = reddit;
+            //   }
+            // });
+            // await delay(0.3);
+            // console.log("[MEMES] " + memesCounter + " image links fetched.");
+            // if (this.posts.length == 0) {
+            //   this.posts = [
+            //     {
+            //       type: "paragraph",
+            //       alignment: "center",
+            //       content: "No data",
+            //     },
+            //     {
+            //       type: "reload",
+            //     },
+            //   ];
+            // }
           },
         },
       },

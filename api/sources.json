@@ -1,0 +1,36 @@
+{
+	"memes": [
+		"https://www.reddit.com/r/PampamilyangPaoLUL.json",
+		"https://www.reddit.com/r/goodanimemes.json",
+		"https://www.reddit.com/r/Animemes.json",
+		"https://www.reddit.com/r/goodanimememes.json",
+		"https://www.reddit.com/r/ProgrammerHumor.json",
+		"https://www.reddit.com/r/programmingmemes.json",
+		"https://www.reddit.com/r/wholesomememes.json",
+		"https://www.reddit.com/r/ComedyCemetery.json",
+		"https://www.reddit.com/r/sadcringe.json",
+		"https://www.reddit.com/r/terriblefacebookmemes.json",
+		"https://www.reddit.com/r/im14andthisisdeep.json",
+		"https://www.reddit.com/r/pewdiepie.json",
+		"https://www.reddit.com/r/PewdiepieSubmissions.json",
+		"https://www.reddit.com/r/meme.json",
+		"https://www.reddit.com/r/memes.json",
+		"https://www.reddit.com/r/dankmemes.json",
+		"https://www.reddit.com/r/redditmoment.json",
+		"https://www.reddit.com/r/bestmemes.json",
+		"https://www.reddit.com/r/Cringetopia.json",
+		"https://www.reddit.com/r/ForShub.json"
+	],
+	"books": [
+		"api/books.json",
+		"https://eru123.github.io/api/books.json"
+	],
+	"announce": [
+		"api/announce.json",
+		"https://eru123.github.io/api/announce.json"
+	],
+	"videos": [
+		"api/videos.json",
+		"https://eru123.github.io/api/videos.json"
+	]
+}

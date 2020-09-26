@@ -57,15 +57,14 @@
             <router-view :key="$route.fullPath"></router-view>
           </v-container>
           <v-footer
-            v-if="sourcesFetchStatus.fetching"
+            v-if="fetching"
             color="primary"
             padless
             dark
             app
             class="pl-2"
             style="font-size: 0.7em"
-            >Fetching Data ({{sourcesFetchStatus.fetch}}/{{sources.length}})
-            Failed: {{sourcesFetchStatus.error}}
+            >Fetching Data
           </v-footer>
         </v-main>
       </v-app>
@@ -181,7 +180,11 @@
             <iframe v-if="post.type == 'videos-playback'" width="100%" height="350" :src="'https://www.youtube.com/embed/' + post.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <div v-if="post.type == 'reload'" align="center">
 
-              <v-btn class="my-8" color="primary" @click="location.reload()">Reload</v-btn>
+              <v-btn class="my-4" color="primary" @click="location.reload()">Reload</v-btn>
+            </div>
+            <div v-if="post.type == 'restart'" align="center">
+
+              <v-btn class="my-4" color="primary" link href="index.html">Restart</v-btn>
             </div>
             <div v-if="post.type == 404" align="center">
               <h3 class="my-8">The link you are trying to access is invalid or the page is deleted.</h3>
@@ -213,7 +216,7 @@
     <script src="js/vuex.js"></script>
     <script src="js/vuetify.js"></script>
     <script src="js/axios.min.js"></script>
-    <script src="js/idb.js"></script>
+    <script src="js/red-mantis.js"></script>
     <script src="js/comp.js"></script>
     <script src="app.js"></script>
     <script src="js/main.js"></script>
