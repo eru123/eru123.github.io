@@ -82,3 +82,35 @@ function shuffleArray(array) {
 
   return array;
 }
+function app__videos(playlist_id = null){
+  var videos = [];
+  var playlist = [];
+  if (localStorage.getItem("source")) {
+    var vids = JSON.parse(localStorage.getItem("source")).videos
+    if (Array.isArray(vids)){
+      for (r in vids){
+        var sr = vids[r];
+        if (localStorage.getItem(sr)) {
+          var d = JSON.parse(localStorage.getItem(sr))
+          RedMantis.foreach(d,function(v){
+            var dups = false
+            RedMantis.foreach(videos,function(vv){
+              if (v.id == vv.id) {dups = true}
+            })
+            if (!dups) {
+              videos.push(v)
+            }
+
+          })
+        }
+      }
+    }
+  } 
+  if (playlist_id) {
+    RedMantis.foreach(videos,function(ctg){
+      if (ctg.id === playlist_id) {playlist = ctg.childs}
+    })
+    return playlist;
+  }
+  return videos;
+}

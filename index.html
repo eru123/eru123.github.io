@@ -69,36 +69,20 @@
         </v-main>
       </v-app>
       <v-app v-if="browser && browserLink">
-        <v-app-bar app dense color="primary" dark>
+        <v-app-bar app color="primary" dark>
           <v-btn icon @click="closeBrowser">
             <v-icon color="#fff">mdi-arrow-left</v-icon>
           </v-btn>
           <v-toolbar-title>{{browserTitle || ''}}</v-toolbar-title>
         </v-app-bar>
-        <v-main>
-          <iframe :src="browserLink" width="100%" height="100%" frameborder="0"></iframe>
+        <v-main style="background-image: url('img/loading.gif');background-repeat: no-repeat;background-position: center;background-size:200px auto;">
+          <iframe :src="browserLink" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </v-main>
       </v-app>
     </div>
 
     <script type="text/x-template" id="xdata">
       <div>
-        <!-- <v-expansion-panels accordion>
-          <v-expansion-panel v-for="(item,i) in 5":key="i">
-            <v-expansion-panel-header>Item</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              ff
-              <v-expansion-panels accordion flat>
-                <v-expansion-panel v-for="(item,i) in 5":key="i">
-                  <v-expansion-panel-header>Item</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels> -->
         <div v-if="posts || false">
           <div v-for="post in posts">
             <h1 v-if="post.type == 'heading' && post.level == 1">{{post.content}}</h1>
@@ -111,9 +95,9 @@
             <p v-if="post.type == 'paragraph' && post.alignment == 'right'" style="text-align:right">{{post.content}}</p>
             <p v-if="post.type == 'paragraph' && post.alignment == 'center'" style="text-align:center">{{post.content}}</p>
             <p v-if="post.type == 'paragraph' && post.alignment == 'justify'" style="text-align:justify">{{post.content}}</p>
-            <v-card v-if="post.type == 'card'" :class="'my-' + (post.my || '8')">
-              <v-list-item v-if="post.avatar">
-                <v-list-item-avatar color="#f2f2f2" class="elevation-6" >
+            <v-card v-if="post.type == 'card'" :class="'my-' + (post.my || '8')" >
+              <v-list-item v-if="post.avatar" link :href="post.href || ''">
+                <v-list-item-avatar color="#ccc">
                   <v-img v-if="post.img" :src="post.img"></v-img>
                   <v-icon v-if="post.icon && !post.img">{{post.icon}}</v-icon>
                 </v-list-item-avatar>
@@ -124,13 +108,31 @@
               </v-list-item>
               <v-card-title v-if="!post.avatar && post.title">
                 <span class="headline">{{post.title}}</span>
-                <v-spacer></v-spacer>
-                <v-btn icon v-if="post.download" @click="download(post.download)"><v-icon link >mdi-download</v-icon></v-btn>
-                </v-menu>
               </v-card-title>
               <v-card-subtitle v-if="!post.avatar && post.subtitle">{{post.subtitle}}</v-card-subtitle>
               <v-card-text v-if="post.content">{{post.content}}</v-card-text>
-              <v-img v-if="post.imageUrl" :src="post.imageUrl"></v-img>
+              <v-img v-if="post.imageUrl" :src="post.imageUrl" :lazy-src="post.thumbnail || 'img/loading.gif'"></v-img>
+              <v-card-actions v-if="post.actions && post.actions.length > 0">
+                <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-card v-if="post.type == 'card-mobile'" :class="'my-' + (post.my || '8')" style="max-width:600px;margin-right:auto;margin-left:auto">
+              <v-list-item v-if="post.avatar" link :href="post.href || ''">
+                <v-list-item-avatar color="#ccc">
+                  <v-img v-if="post.img" :src="post.img"></v-img>
+                  <v-icon v-if="post.icon && !post.img">{{post.icon}}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="headline" v-if="post.title">{{post.title}}</v-list-item-title>
+                  <v-list-item-subtitle v-if="post.subtitle">{{post.subtitle}}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-card-title v-if="!post.avatar && post.title">
+                <span class="headline">{{post.title}}</span>
+              </v-card-title>
+              <v-card-subtitle v-if="!post.avatar && post.subtitle">{{post.subtitle}}</v-card-subtitle>
+              <v-card-text v-if="post.content">{{post.content}}</v-card-text>
+              <v-img v-if="post.imageUrl" :src="post.imageUrl" :lazy-src="post.thumbnail || 'img/loading.gif'"></v-img>
               <v-card-actions v-if="post.actions && post.actions.length > 0">
                 <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
               </v-card-actions>
@@ -170,7 +172,7 @@
                 <v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-list>
-                    <v-list-item v-for="video in item.childs" :key="video.name" :href="'#'+$router.currentRoute.fullPath + '/' + item.id + '/' + video.code" link>
+                    <v-list-item v-for="video in item.childs" :key="video.name" @click="openYT(video.name,video.code)" link>
                       <v-list-item-icon>
                         <v-icon color="red">mdi-youtube</v-icon>
                       </v-list-item-icon>
@@ -221,6 +223,7 @@
     <script src="js/vuex.js"></script>
     <script src="js/vuetify.js"></script>
     <script src="js/axios.min.js"></script>
+    <script src="js/marked.min.js"></script>
     <script src="js/red-mantis.js"></script>
     <script src="js/comp.js"></script>
     <script src="app.js"></script>

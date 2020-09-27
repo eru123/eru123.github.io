@@ -275,45 +275,40 @@ const app_data = [
         },
         created: async function () {
           changeDocTitle("Video Categories");
-
-          while (store.state.sourcesFetchStatus.fetching) {
-            await delay(0.5);
+          while (this.$store.state.fetching) {
+            await delay(0.1);
           }
-
           this.retrieveCategories();
         },
         methods: {
           retrieveCategories: async function () {
             this.posts = [];
-
-            // var links = getLinksFromSource(sources, "videos");
-            // var data = getDataFromLinks(links, "id");
-            // await delay(0.1);
-            // if (data.length > 0) {
-            //   this.posts = [
-            //     {
-            //       type: "heading",
-            //       level: 1,
-            //       content: "Categories",
-            //     },
-            //     {
-            //       type: "videos-categories",
-            //       items: data,
-            //     },
-            //   ];
-            // } else {
-            //   this.posts = [
-            //     {
-            //       type: "paragraph",
-            //       alignment: "center",
-            //       content: "No video categories fetched.",
-            //     },
-            //     {
-            //       type: "reload",
-            //     },
-            //   ];
-            // }
-          },
+            var videos = app__videos() || [];
+            if (videos.length > 0) {
+              this.posts = [
+                {
+                  type: "heading",
+                  level: 1,
+                  content: "Categories",
+                },
+                {
+                  type: "videos-categories",
+                  items: videos,
+                },
+              ];
+            } else {
+              this.posts = [
+                {
+                  type: "paragraph",
+                  alignment: "center",
+                  content: "No data, try restarting the app to retrieve new posts"
+                },
+                {
+                  type: "restart"
+                }
+              ]
+            }
+          }
         },
       },
     },
@@ -335,13 +330,14 @@ const app_data = [
         },
         created: async function () {
           changeDocTitle("Video Playlists");
-          while (store.state.sourcesFetchStatus.fetching) {
-            await delay(0.5);
+          while (this.$store.state.fetching) {
+            await delay(0.1);
           }
           this.retrieveCategories();
         },
         methods: {
           retrieveCategories: async function () {
+            
             this.posts = [
               {
                 type: "back",
@@ -355,40 +351,24 @@ const app_data = [
               },
             ];
 
-            // var links = getLinksFromSource(sources, "videos");
-            // var data = getDataFromLinks(links, "id");
-            // await delay(0.1);
-            // if (data.length > 0) {
-            //   data.forEach((x) => {
-            //     if (x.id == this.$route.params.category) {
-            //       if (x.childs && x.childs.length > 0) {
-            //         this.posts.push({
-            //           type: "videos-playlists",
-            //           items: x.childs,
-            //         });
-            //       } else {
-            //         this.posts.push({
-            //           type: "paragraph",
-            //           alignment: "left",
-            //           content: "No Playlists",
-            //         });
-            //         this.posts.push({
-            //           type: "reload",
-            //         });
-            //       }
-            //     }
-            //   });
-            // } else {
-            //   this.posts.push({
-            //     type: "paragraph",
-            //     alignment: "left",
-            //     content: "No Playlists",
-            //   });
-            //   this.posts.push({
-            //     type: "reload",
-            //   });
-            // }
+            var ctg = app__videos(this.$route.params.category);
+            if (ctg.length > 0) {
+              this.posts.push({
+                type: "videos-playlists",
+                items: ctg,
+              });
+            } else {
+              this.posts.push({
+                type: "paragraph",
+                alignment: "left",
+                content: "No data, try restarting the app to retrieve new posts"
+              })
+              this.posts.push({ type: "restart"})
+            }
           },
+          openYT: function(name,code){
+            this.$store.commit('openBrowser',{title:name,link: "https://www.youtube.com/embed/" + code})
+          }
         },
       },
     },
@@ -436,6 +416,7 @@ const app_data = [
         template: "#xdata",
         data() {
           return {
+            mobile: true,
             posts: [
               {
                 type: "loading",
@@ -445,7 +426,7 @@ const app_data = [
         },
         created: async function () {
           changeDocTitle("Memes");
-          while (store.state.fetching) {
+          while (this.$store.state.fetching) {
             await delay(0.1);
           }
           this.refreshMemes();
@@ -483,18 +464,20 @@ const app_data = [
                       totalPosts++;
                       var d = r[i].data;
                       var ttl = d.title || null
-                      var img = d.url_overridden_by_dest || d.thumbnail || null
+                      var img = d.url_overridden_by_dest || null
+                      var thmb = 'img/loading.gif'
                       var subtl = d.subreddit || d.data.title  || null
                       var txt = d.selftext || null
                       if (RedMantis.imgChk(img)) {
                         totalImages++;
                         final.push({
-                          type: "card",
+                          type: "card-mobile",
                           title: ttl,
                           subtitle: subtl,
                           imageUrl: img,
                           download: img,
-                          content: txt
+                          content: txt,
+                          thumbnail: thmb
                         })
                       }
                     }
@@ -503,6 +486,11 @@ const app_data = [
 
                 if (final.length > 0) {
                   this.posts = final
+                  this.posts.push({
+                    type: "paragraph",
+                    alignment: "center",
+                    content: "End of Result"
+                  })
                   console.log("[MEMES] Showing " + totalImages + " of " + totalPosts + " memes.")
                 } else {
                   this.posts = [
@@ -524,6 +512,9 @@ const app_data = [
                   type: "paragraph",
                   alignment: "center",
                   content: "No data, try restarting the app to retrieve new posts"
+                },
+                {
+                  type: "restart"
                 }
               ]
             }
