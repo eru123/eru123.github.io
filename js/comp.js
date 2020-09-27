@@ -114,3 +114,78 @@ function app__videos(playlist_id = null){
   }
   return videos;
 }
+function app__books(){
+  var books = [];
+  if (localStorage.getItem("source")) {
+    var bks = JSON.parse(localStorage.getItem("source")).books
+    if (Array.isArray(bks)) {
+      RedMantis.foreach(bks,function(bk){
+        if (JSON.parse(localStorage.getItem(bk))) {
+          var b = JSON.parse(localStorage.getItem(bk));
+          RedMantis.foreach(b,function(itm){
+            var dups = false
+            RedMantis.foreach(books,function(book){
+              if(book.link === itm.link){
+                dups = true
+              }
+            })
+            if (!dups) {
+              books.push(itm)
+            }
+          })
+        }
+      })
+    }
+  } 
+  return books;
+}
+function app__booksCategories(){
+  var books = app__books()
+  var categories = []
+  RedMantis.foreach(books,function(book){
+    var dups = false
+    RedMantis.foreach(categories,function(ctg){
+      if (ctg === book.category) {
+        dups = true
+      }
+    })
+    if (!dups) {
+      categories.push(book.category)
+    }
+  })
+  return categories;
+}
+function app__booksTags(){
+  var books = app__books()
+  var tags = []
+  RedMantis.foreach(books,function(book){
+    RedMantis.foreach(book.tags,function(ctg){
+      var dups = false
+      RedMantis.foreach(tags,function(v){
+        if (v === ctg) {dups = true}
+      })
+      if (!dups) {
+        tags.push(ctg)
+      }
+    })
+  })
+  return tags;
+}
+function app__booksTagsFromCategory(category){
+  var books = app__books()
+  var tags = []
+  RedMantis.foreach(books,function(book){
+    RedMantis.foreach(book.tags,function(ctg){
+      if (book.category === category) {
+        var dups = false
+        RedMantis.foreach(tags,function(v){
+          if (v === ctg) {dups = true}
+        })
+        if (!dups) {
+          tags.push(ctg)
+        }
+      }
+    })
+  })
+  return tags;
+}

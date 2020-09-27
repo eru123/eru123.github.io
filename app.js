@@ -1,157 +1,3 @@
-const lorem =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto labore debitis suscipit esse, consectetur cum, vitae laborum aliquid facilis nam a accusantium perspiciatis maxime illo voluptate, dolorum numquam assumenda ducimus.";
-const sample_yte =
-  '<iframe width="560" height="315" src="https://www.youtube.com/embed/rpQhIdRwNMA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-
-const sources = [
-  {
-    name: "books",
-    links: [
-      "api/books.json",
-      // "https://eru123.github.io/api/books.json",
-    ],
-  },
-  {
-    name: "videos",
-    links: [
-      "api/videos.json", 
-      // "https://eru123.github.io/api/videos.json"
-    ],
-  },
-  {
-    name: "articles",
-    links: [
-      "api/articles.json", 
-      // "https://eru123.github.io/api/articles.json"
-    ],
-  },
-  {
-    name: "announce",
-    links: [
-      "api/announce.json",
-      // "https://eru123.github.io/api/announce.json",
-    ],
-  },
-  {
-    name: "reddit",
-    links: [
-      // "https://www.reddit.com/r/PampamilyangPaoLUL.json",
-      // "https://www.reddit.com/r/goodanimemes.json",
-      // "https://www.reddit.com/r/Animemes.json",
-      // "https://www.reddit.com/r/goodanimememes.json",
-      // "https://www.reddit.com/r/ProgrammerHumor.json",
-      // "https://www.reddit.com/r/programmingmemes.json",
-      // "https://www.reddit.com/r/wholesomememes.json",
-      // "https://www.reddit.com/r/ComedyCemetery.json",
-      // "https://www.reddit.com/r/sadcringe.json",
-      // "https://www.reddit.com/r/terriblefacebookmemes.json",
-      // "https://www.reddit.com/r/im14andthisisdeep.json",
-      // "https://www.reddit.com/r/pewdiepie.json",
-      // "https://www.reddit.com/r/PewdiepieSubmissions.json",
-      // "https://www.reddit.com/r/meme.json",
-      // "https://www.reddit.com/r/memes.json",
-      // "https://www.reddit.com/r/dankmemes.json",
-      // "https://www.reddit.com/r/redditmoment.json",
-      // "https://www.reddit.com/r/bestmemes.json",
-      // "https://www.reddit.com/r/Cringetopia.json",
-      // "https://www.reddit.com/r/ForShub.json",
-    ],
-  },
-];
-
-const sample_posts = [
-  {
-    type: "heading",
-    level: 1,
-    content: "Heading 1",
-  },
-  {
-    type: "heading",
-    level: 2,
-    content: "Heading 2",
-  },
-  {
-    type: "heading",
-    level: 3,
-    content: "Heading 3",
-  },
-  {
-    type: "heading",
-    level: 4,
-    content: "Heading 4",
-  },
-  {
-    type: "heading",
-    level: 5,
-    content: "Heading 5",
-  },
-  {
-    type: "heading",
-    level: 6,
-    content: "Heading 6",
-  },
-  {
-    type: "paragraph",
-    alignment: "left",
-    content: "left paragraph - " + lorem + lorem,
-  },
-  {
-    type: "paragraph",
-    alignment: "center",
-    content: "center paragraph - " + lorem + lorem,
-  },
-  {
-    type: "paragraph",
-    alignment: "right",
-    content: "right paragraph - " + lorem + lorem,
-  },
-  {
-    type: "paragraph",
-    alignment: "justify",
-    content: "justify paragraph - " + lorem + lorem,
-  },
-  {
-    type: "carousel",
-    items: [
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-      },
-    ],
-  },
-  {
-    type: "card",
-    avatar: false,
-    img: "img/facebook_logo.png",
-    icon: "mdi-home",
-    title: "I AM A CARD",
-    subtitle: "subtitle",
-    content: lorem + lorem,
-    actions: [
-      {
-        name: "Try it",
-        link: "",
-      },
-      {
-        name: "Demo",
-        link: "",
-      },
-    ],
-  },
-  {
-    type: "youtube",
-    link: "https://www.youtube.com/embed/rpQhIdRwNMA",
-  },
-];
-
 const app_data = [
   {
     route: {
@@ -180,7 +26,7 @@ const app_data = [
     },
   },
   {
-    page: "Books",
+    page: "Library",
     icon: "mdi-book-open-variant",
     route: {
       name: "Books",
@@ -199,7 +45,7 @@ const app_data = [
         created: async function() {
           changeDocTitle("Books");
 
-          while (store.state.sourcesFetchStatus.fetching) {
+          while (this.$store.state.fetching) {
             await delay(0.5);
           }
           
@@ -208,46 +54,63 @@ const app_data = [
         methods: {
           retrieveBooks: async function () {
             this.posts = [];
+            var books = app__books();
+            var categories = app__booksCategories();
+            var tags = app__booksTags();
+            var tagsFromCategory = app__booksTagsFromCategory("kdrama")
+            if (books.length > 0) {
 
-            // var books = await this.bookList();
+              var recommended =  this.recommend();
 
-            // if (books.length > 0) {
+              this.posts.push({
+                type: "heading",
+                level: 3,
+                content: "Recommended"
+              })
+              this.posts.push({
+                type: "books-recommended",
+                items: recommended
+              })
 
-            //   var recommendedBooks = await this.randomBookList(5);
+              if (categories.length > 0) {
+                this.posts.push({
+                  type: "heading",
+                  level: 3,
+                  content: "Categories"
+                })
+                var ctgs_final = []
 
-            //   console.log(recommendedBooks)
-            //   this.posts.push({
-            //     type: "heading",
-            //     level: 3,
-            //     content: "Recommended"
-            //   })
-            //   this.posts.push({
-            //     type: "books-recommended",
-            //     items: recommendedBooks
-            //   })
-            // } else {
-            //   this.posts = [
-            //     {
-            //       type: "paragraph",
-            //       alignment: "center",
-            //       content: "No Data"                  
-            //     },
-            //     {
-            //       type: "reload"
-            //     }
-            //   ]
-            // }
+                RedMantis.foreach(categories,function(ctg){
+                  var ctgs = app__booksTagsFromCategory(ctg)
+                  ctgs_final.push({
+                    category: ctg,
+                    tags: ctgs
+                  })
+                })
+                
+                this.posts.push({
+                  type: "books-categories",
+                  items: ctgs_final
+                })
+              }
+
+            } else {
+              this.posts = [
+                {
+                  type: "paragraph",
+                  alignment: "center",
+                  content: "No Data"                  
+                },
+                {
+                  type: "reload"
+                }
+              ]
+            }
             
           },
-          bookList: async function(){
-            // var links = getLinksFromSource(sources, "books");
-            // var data = getDataFromLinks(links, "link");
-            // await delay(0.1);
-            // return data;
-          },
-          randomBookList: async function(show = 10){
-            var books = await this.bookList()
-            return shuffleArray(books).slice(0,show)
+          recommend:  function(show = 10){
+            var books =  app__books();
+            return RedMantis.shuffleArray(books).slice(0,show)
           },
           openBook: function(title,link){
             this.$store.commit("openBrowser",{title:title,link:link})
@@ -274,7 +137,7 @@ const app_data = [
           };
         },
         created: async function () {
-          changeDocTitle("Video Categories");
+          changeDocTitle("Videos");
           while (this.$store.state.fetching) {
             await delay(0.1);
           }
@@ -288,7 +151,7 @@ const app_data = [
               this.posts = [
                 {
                   type: "heading",
-                  level: 1,
+                  level: 3,
                   content: "Categories",
                 },
                 {
@@ -329,7 +192,7 @@ const app_data = [
           };
         },
         created: async function () {
-          changeDocTitle("Video Playlists");
+          changeDocTitle("Videos");
           while (this.$store.state.fetching) {
             await delay(0.1);
           }
@@ -346,7 +209,7 @@ const app_data = [
               },
               {
                 type: "heading",
-                level: 1,
+                level: 3,
                 content: "Playlists",
               },
             ];
@@ -443,7 +306,7 @@ const app_data = [
                 this.posts = [
                   {
                     type: "heading",
-                    level: 1,
+                    level: 3,
                     content: "May post na wait kalang ha! love you!"
                   }
                 ]
@@ -566,7 +429,7 @@ const app_data = [
               },
               {
                 type: "heading",
-                level: 1,
+                level: 3,
                 content: "Support",
               },
               {
