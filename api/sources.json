@@ -26,8 +26,7 @@
 		"https://eru123.github.io/api/books.json"
 	],
 	"announce": [
-		"api/announce.json",
-		"https://eru123.github.io/api/announce.json"
+		"https://www.reddit.com/r/u_lighty262.json"
 	],
 	"videos": [
 		"api/videos.json",

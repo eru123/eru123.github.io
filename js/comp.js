@@ -200,3 +200,70 @@ function app__booksFromCategory(category){
 
   return result
 }
+function app__announcements(){
+  var announcements = []
+  var announce_data = []
+  if (localStorage.getItem("source")) {
+    var sources = JSON.parse(localStorage.getItem("source")).announce
+    for (source in sources){
+      var src = sources[source];
+      if (localStorage.getItem(src)) {
+        var d = JSON.parse(localStorage.getItem(src))
+        announce_data.push(d.data.children)
+      }
+    }
+    for (var i = 0; i < 31; i++) {
+      RedMantis.foreach(announce_data,function(r){
+        if (r[i] && r[i].data && r[i].kind == "t3") {
+          var d = r[i].data;
+          var ttl = d.title || null
+          var img = d.url_overridden_by_dest || null
+          var subtl = d.subreddit || d.author || "reddit"
+          var txt = d.selftext || null
+          var htm = d.selftext_html || null
+          var thmb = "img/loading.gif"
+          if (RedMantis.imgChk(img)) {
+            announcements.push({
+              title: ttl,
+              subtitle: "r/"+subtl,
+              imageUrl: img,
+              content: txt,
+              html: htm,
+              thumbnail: thmb
+            })
+          } else {
+            announcements.push({
+              title: ttl,
+              subtitle: "r/"+subtl,
+              html: htm,
+              content: txt
+            })
+          }
+        }
+      })
+    }
+  }
+  return announcements
+}
+function app__memes(){
+  var memes = []
+  var reddit = []
+  if (localStorage.getItem("source")) {
+    var sources = JSON.parse(localStorage.getItem("source")).memes
+    for (source in sources){
+      var src = sources[source];
+      if (localStorage.getItem(src)) {
+        var d = JSON.parse(localStorage.getItem(src))
+        reddit.push(d.data.children)
+      }
+    }
+    for (var i = 0; i < 31; i++) {
+      RedMantis.foreach(reddit,function(r){
+        if (r[i] && r[i].data) {
+          memes.push(r[i].data)
+        }
+      })
+    }
+  }
+  return memes
+}

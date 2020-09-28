@@ -35,6 +35,9 @@
         -ms-user-select: none; 
         user-select: none; 
       }
+      h1,h2,h3,h4,h5,h6 {
+        color: #333;
+      }
       .app-flex-parent {
         display: flex;
         flex-wrap: wrap;
@@ -60,7 +63,30 @@
         padding: 8px      
       }
             /* On screens that are 992px or less, set the background color to blue */
-      @media screen and (max-width: 800px) {
+      @media screen and (max-width: 900px) {
+        .app-flex-child-lg-5 {
+          flex: 1 0 20%;
+          padding: 8px      
+        }
+        .app-flex-child-lg-4 {
+          flex: 1 0 25%;
+          padding: 8px      
+        }
+        .app-flex-child-lg-3 {
+          flex: 1 0 33.33%;
+          padding: 8px      
+        }
+        .app-flex-child-lg-2 {
+          flex: 1 0 50%;
+          padding: 8px      
+        }
+        .app-flex-child-lg-1 {
+          flex: 1 0 100%;
+          padding: 8px      
+        }
+      }
+
+      @media screen and (max-width: 720px) {
         .app-flex-child-md-5 {
           flex: 1 0 20%;
           padding: 8px      
@@ -84,7 +110,7 @@
       }
 
       /* On screens that are 600px or less, set the background color to olive */
-      @media screen and (max-width: 650px) {
+      @media screen and (max-width: 600px) {
         .app-flex-child-sm-5 {
           flex: 1 0 20%;
           padding: 8px      
@@ -114,7 +140,7 @@
       <v-app v-if="!browser">
         <v-navigation-drawer v-model="drawer" app>
           <v-list dense>
-            <v-list-item v-for="item in menu" link :href="item.link">
+            <v-list-item v-for="item in menu" link :href="item.link" :key="item.name">
               <v-list-item-action>
                 <v-icon>{{item.icon}}</v-icon>
               </v-list-item-action>
@@ -166,7 +192,7 @@
       <div>
         <div v-if="greet" class="px-8 py-4" elevation="6"><h1 style="color:#484f4f">{{greet}}</h1></div>
         <div class="app-flex-parent">
-          <div v-for="item in featured" class="app-flex-child-4 app-flex-child-md-2 app-flex-child-sm-1" elevation="6">
+          <div v-for="item in featured" class="app-flex-child-4 app-flex-child-lg-3 app-flex-child-md-2 app-flex-child-sm-1" elevation="6" :key="item.title">
             <v-card  :color="item.color" dark link :href="item.link || ''">
               <v-list-item>
                 <v-list-item-avatar color="">
@@ -180,6 +206,15 @@
               </v-list-item>
             </v-card>
           </div>
+        </div>
+        <div v-if="fetching" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
+        <div v-if="announcements">
+          <h3 class="my-4">Announcements</h3>
+          <v-card v-for="anc in announcements" class="my-4" :key="anc.title + anc.content">
+            <v-card-title>{{anc.title}}</v-card-title>
+            <v-card-subtitle>{{anc.subtitle}}</v-card-subtitle>
+            <v-card-text>{{anc.content}}</v-card-text>
+          </v-card>
         </div>
       </div>
     </script>
