@@ -164,9 +164,10 @@
 
     <script type="text/x-template" id="home">
       <div>
+        <div v-if="greet" class="px-8 py-4" elevation="6"><h1 style="color:#484f4f">{{greet}}</h1></div>
         <div class="app-flex-parent">
           <div v-for="item in featured" class="app-flex-child-4 app-flex-child-md-2 app-flex-child-sm-1" elevation="6">
-            <v-card  :color="item.color" dark link>
+            <v-card  :color="item.color" dark link :href="item.link || ''">
               <v-list-item>
                 <v-list-item-avatar color="">
                   <v-img v-if="item.img" :src="item.img"></v-img>

@@ -182,6 +182,24 @@
     }
     return url
   }
+  function greet() {
+    var hours = (new Date).getHours();
+    var res = "Day"
+    if (hours <= 11) {
+      res = "Morning"
+    } else if (hours == 12) {
+      res = "Noon"
+    } else if (hours <= 17) {
+      res = "After Noon"
+    } else if (hours <= 20) {
+      res = "Evening"
+    } else if (hours > 20) {
+      res = "Night"
+    } else {
+      res = "Day"
+    }
+    return "Good " + res;
+  }
 	return {
 		online: isOnline,
     foreach: forEachValue,
@@ -189,6 +207,7 @@
 		data: getAppData,
     imgChk: imageChecker,
     getFileName: getFileNameFromUrl,
-    shuffleArray: shuffleArray
+    shuffleArray: shuffleArray,
+    greet: greet
 	}
 })));

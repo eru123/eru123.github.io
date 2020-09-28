@@ -16,27 +16,32 @@ const app_data = [
         template: "#home",
         data() {
           return {
+            greet: "",
             featured: [
               {
                 title: "Library",
+                link: "#/books",
                 description: "This is an app",
                 icon: "mdi-book-open-variant",
-                color: "#618685"
+                color: "#588c7e"
               },
               {
                 title: "Videos",
+                link: "#/videos",
                 description: "This is an app",
                 icon: "mdi-youtube",
                 color: "#bc5a45"
               },
               {
                 title: "Memes",
+                link: "#/memes",
                 description: "This is an app",
                 icon: "mdi-dance-pole",
-                color: "#87bdd8"
+                color: "#034f84"
               },
               {
                 title: "About",
+                link: "#/about",
                 description: "This is an app",
                 icon: "mdi-alpha-a-circle",
                 color: "#622569"
@@ -46,6 +51,7 @@ const app_data = [
         },
         created() {
           changeDocTitle("Red Mantis");
+          this.greet = "Hello, " + RedMantis.greet()
         },
       },
     },
@@ -599,3 +605,5 @@ const app_data = [
     },
   }
 ];
+
+
