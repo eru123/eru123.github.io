@@ -13,11 +13,36 @@ const app_data = [
       name: "Home",
       path: "/home",
       component: {
-        template: "#xdata",
+        template: "#home",
         data() {
           return {
-            posts: [],
-          };
+            featured: [
+              {
+                title: "Library",
+                description: "This is an app",
+                icon: "mdi-book-open-variant",
+                color: "#618685"
+              },
+              {
+                title: "Videos",
+                description: "This is an app",
+                icon: "mdi-youtube",
+                color: "#bc5a45"
+              },
+              {
+                title: "Memes",
+                description: "This is an app",
+                icon: "mdi-dance-pole",
+                color: "#87bdd8"
+              },
+              {
+                title: "About",
+                description: "This is an app",
+                icon: "mdi-alpha-a-circle",
+                color: "#622569"
+              }
+            ]
+          }
         },
         created() {
           changeDocTitle("Red Mantis");
@@ -56,8 +81,7 @@ const app_data = [
             this.posts = [];
             var books = app__books();
             var categories = app__booksCategories();
-            var tags = app__booksTags();
-            var tagsFromCategory = app__booksTagsFromCategory("kdrama")
+
             if (books.length > 0) {
 
               var recommended =  this.recommend();
@@ -111,6 +135,61 @@ const app_data = [
           recommend:  function(show = 10){
             var books =  app__books();
             return RedMantis.shuffleArray(books).slice(0,show)
+          },
+          openBook: function(title,link){
+            this.$store.commit("openBrowser",{title:title,link:link})
+          }
+        },
+      },
+    },
+  },
+  {
+    route: {
+      name: "BooksCategory",
+      path: "/books/:category",
+      component: {
+        template: "#xdata",
+        data() {
+          return {
+            posts: [
+              {
+                type: "loading",
+              },
+            ],
+          };
+        },
+        created: async function () {
+          changeDocTitle(this.$router.currentRoute.params.category.toUpperCase() || "Book Category");
+          while (this.$store.state.fetching) {
+            await delay(0.1);
+          }
+          this.retrieveCategories();
+        },
+        methods: {
+          retrieveCategories: function(){
+            this.posts = [{
+              type: "back",
+              link: "#/books",
+              name: "Back to Libary"
+            }]
+
+            var books = app__booksFromCategory(this.$router.currentRoute.params.category)
+
+            if (books.length > 0) {
+              this.posts.push({
+                type: "books-category",
+                items: books
+              })
+            } else {
+              this.posts.push({
+                type: "paragraph",
+                alignment: "center",
+                content: "There is no books within this category, try to restart the app to get new updates."
+              })
+              this.posts.push({
+                type: "restart"
+              })
+            }
           },
           openBook: function(title,link){
             this.$store.commit("openBrowser",{title:title,link:link})
@@ -329,14 +408,14 @@ const app_data = [
                       var ttl = d.title || null
                       var img = d.url_overridden_by_dest || null
                       var thmb = 'img/loading.gif'
-                      var subtl = d.subreddit || d.data.title  || null
+                      var subtl = d.subreddit || "reddit"
                       var txt = d.selftext || null
                       if (RedMantis.imgChk(img)) {
                         totalImages++;
                         final.push({
                           type: "card-mobile",
                           title: ttl,
-                          subtitle: subtl,
+                          subtitle: "r/"+subtl,
                           imageUrl: img,
                           download: img,
                           content: txt,

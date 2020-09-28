@@ -189,3 +189,14 @@ function app__booksTagsFromCategory(category){
   })
   return tags;
 }
+function app__booksFromCategory(category){
+  var books = app__books()
+  var result = []
+  RedMantis.foreach(books,function(book){
+    if (book.category === category) {
+      result.push(book)
+    }
+  })
+
+  return result
+}

@@ -26,6 +26,87 @@
     <meta name="twitter:card" content="summary" />
     <meta property="twitter:title" content="Red Mantis Portal" />
     <meta name="twitter:site" content="@EruRoraito9" />
+    <style>
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none; 
+        -khtml-user-select: none; 
+        -moz-user-select: none; 
+        -ms-user-select: none; 
+        user-select: none; 
+      }
+      .app-flex-parent {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .app-flex-child-5 {
+        flex: 1 0 20%;
+        padding: 8px      
+      }
+      .app-flex-child-4 {
+        flex: 1 0 25%;
+        padding: 8px      
+      }
+      .app-flex-child-3 {
+        flex: 1 0 33.33%;
+        padding: 8px      
+      }
+      .app-flex-child-2 {
+        flex: 1 0 50%;
+        padding: 8px      
+      }
+      .app-flex-child-1 {
+        flex: 1 0 100%;
+        padding: 8px      
+      }
+            /* On screens that are 992px or less, set the background color to blue */
+      @media screen and (max-width: 800px) {
+        .app-flex-child-md-5 {
+          flex: 1 0 20%;
+          padding: 8px      
+        }
+        .app-flex-child-md-4 {
+          flex: 1 0 25%;
+          padding: 8px      
+        }
+        .app-flex-child-md-3 {
+          flex: 1 0 33.33%;
+          padding: 8px      
+        }
+        .app-flex-child-md-2 {
+          flex: 1 0 50%;
+          padding: 8px      
+        }
+        .app-flex-child-md-1 {
+          flex: 1 0 100%;
+          padding: 8px      
+        }
+      }
+
+      /* On screens that are 600px or less, set the background color to olive */
+      @media screen and (max-width: 650px) {
+        .app-flex-child-sm-5 {
+          flex: 1 0 20%;
+          padding: 8px      
+        }
+        .app-flex-child-sm-4 {
+          flex: 1 0 25%;
+          padding: 8px      
+        }
+        .app-flex-child-sm-3 {
+          flex: 1 0 33.33%;
+          padding: 8px      
+        }
+        .app-flex-child-sm-2 {
+          flex: 1 0 50%;
+          padding: 8px      
+        }
+        .app-flex-child-sm-1 {
+          flex: 1 0 100%;
+          padding: 8px      
+        }
+      }
+    </style>
   </head>
   <body style="display: none">
 
@@ -80,6 +161,27 @@
         </v-main>
       </v-app>
     </div>
+
+    <script type="text/x-template" id="home">
+      <div>
+        <div class="app-flex-parent">
+          <div v-for="item in featured" class="app-flex-child-4 app-flex-child-md-2 app-flex-child-sm-1" elevation="6">
+            <v-card  :color="item.color" dark link>
+              <v-list-item>
+                <v-list-item-avatar color="">
+                  <v-img v-if="item.img" :src="item.img"></v-img>
+                  <v-icon v-if="item.icon && !item.img">{{item.icon}}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="headline" v-if="item.title">{{item.title}}</v-list-item-title>
+                  <v-list-item-subtitle v-if="item.description">{{item.description}}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card>
+          </div>
+        </div>
+      </div>
+    </script>
 
     <script type="text/x-template" id="xdata">
       <div>
@@ -223,6 +325,9 @@
 
             <div v-if="post.type == 'books-recommended'">
               <v-list-item two-line v-for="item in post.items" link @click="openBook(item.name,item.link)">
+                <v-list-item-action>
+                  <v-icon>mdi-book</v-icon>
+                </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title>{{item.name}}</v-list-item-title>
                   <v-list-item-subtitle style="text-transform: capitalize">
@@ -232,22 +337,22 @@
                 </v-list-item-content>
               </v-list-item>
             </div>
-
-            <div v-if="post.type == 'books-categories'">
-              <v-list-item two-line v-for="item in post.items" link :href="'#/books/category/' + item.category">
+            <div v-if="post.type == 'books-category'">
+              <v-list-item two-line v-for="item in post.items" link @click="openBook(item.name,item.link)">
                 <v-list-item-action>
-                  <v-icon>mdi-format-list-bulleted</v-icon>
+                  <v-icon>mdi-book</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
-                  <v-list-item-title style="text-transform: capitalize">{{item.category}}</v-list-item-title>
-                  <v-list-item-subtitle style="text-transform: capitalize">
+                  <v-list-item-title>{{item.name}}</v-list-item-title>
+                  <v-list-item-subtitle>
                     <small v-for="tag in item.tags" style="color:#1e90ff;margin-left:4px"> #{{tag}} </small>
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </div>
-            <div v-if="post.type == 'books-tags'">
-              <v-list-item two-line v-for="item in post.items" link :href="'#/books/category/' + item.category">
+
+            <div v-if="post.type == 'books-categories'">
+              <v-list-item two-line v-for="item in post.items" link :href="'#/books/' + item.category">
                 <v-list-item-action>
                   <v-icon>mdi-format-list-bulleted</v-icon>
                 </v-list-item-action>
@@ -265,10 +370,10 @@
     </script>
 
     <!-- Production -->
-    <script src="js/vue.min.js"></script>
+    <!-- <script src="js/vue.min.js"></script> -->
 
     <!-- Development -->
-    <!-- <script src="js/dev-vue.js"></script>  -->
+    <script src="js/dev-vue.js"></script> 
 
     <script src="js/vue-router.js"></script>
     <script src="js/vuex.js"></script>

@@ -30,9 +30,10 @@ new Vue({
   el: "#app",
   data: store.state,
   created() {
+    this.$store.commit('stopFetching')
     document.body.style.display = "block";
     changeDocTitle("App");
-    this.fetchSource();
+    // this.fetchSource();
   },
   methods: {
     fetchSource: function () {
