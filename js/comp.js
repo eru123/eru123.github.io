@@ -260,7 +260,9 @@ function app__memes(){
     for (var i = 0; i < 31; i++) {
       RedMantis.foreach(reddit,function(r){
         if (r[i] && r[i].data) {
-          memes.push(r[i].data)
+          if (RedMantis.imgChk(r[i].data.url_overridden_by_dest)) {
+            memes.push(r[i].data)
+          }
         }
       })
     }

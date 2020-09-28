@@ -376,15 +376,13 @@ const app_data = [
       name: "Memes",
       path: "/memes",
       component: {
-        template: "#xdata",
+        template: "#memes",
         data() {
           return {
             mobile: true,
-            posts: [
-              {
-                type: "loading",
-              },
-            ]
+            fetching: true,
+            posts: [],
+            memes: []
           };
         },
         created: async function () {
@@ -392,97 +390,109 @@ const app_data = [
           while (this.$store.state.fetching) {
             await delay(0.1);
           }
+          this.fetching = false;
           this.refreshMemes();
         },
         methods: {
           refreshMemes: function () {
-            this.posts = [];
-            var reddit = [];
-            var final = [];
-            var memes = app__memes()
-            console.log(memes)
-            // if (localStorage.getItem("source")) {
-            //   var subr = JSON.parse(localStorage.getItem("source")).memes
+            this.posts = app__memes();
+            this.memes = [];
+            this.next();
+          /*
+            if (localStorage.getItem("source")) {
+              var subr = JSON.parse(localStorage.getItem("source")).memes
 
-            //   if (Array.isArray(subr)){
-            //     this.posts = [
-            //       {
-            //         type: "heading",
-            //         level: 3,
-            //         content: "May post na wait kalang ha! love you!"
-            //       }
-            //     ]
+              if (Array.isArray(subr)){
+                this.posts = [
+                  {
+                    type: "heading",
+                    level: 3,
+                    content: "May post na wait kalang ha! love you!"
+                  }
+                ]
 
-            //     for (r in subr){
-            //       var sr = subr[r];
-            //       if (localStorage.getItem(sr)) {
-            //         var d = JSON.parse(localStorage.getItem(sr))
-            //         reddit.push(d.data.children)
-            //       }
-            //     }
-            //     var totalPosts = 0;
-            //     var totalImages = 0
+                for (r in subr){
+                  var sr = subr[r];
+                  if (localStorage.getItem(sr)) {
+                    var d = JSON.parse(localStorage.getItem(sr))
+                    reddit.push(d.data.children)
+                  }
+                }
+                var totalPosts = 0;
+                var totalImages = 0
 
-            //     for (var i = 0; i < 31; i++) {
-            //       RedMantis.foreach(reddit,function(r){
-            //         if (r[i] && r[i].data) {
-            //           totalPosts++;
-            //           var d = r[i].data;
-            //           var ttl = d.title || null
-            //           var img = d.url_overridden_by_dest || null
-            //           var thmb = 'img/loading.gif'
-            //           var subtl = d.subreddit || "reddit"
-            //           var txt = d.selftext || null
-            //           if (RedMantis.imgChk(img)) {
-            //             totalImages++;
-            //             final.push({
-            //               type: "card-mobile",
-            //               title: ttl,
-            //               subtitle: "r/"+subtl,
-            //               imageUrl: img,
-            //               download: img,
-            //               content: txt,
-            //               thumbnail: thmb
-            //             })
-            //           }
-            //         }
-            //       })
-            //     }
+                for (var i = 0; i < 31; i++) {
+                  RedMantis.foreach(reddit,function(r){
+                    if (r[i] && r[i].data) {
+                      totalPosts++;
+                      var d = r[i].data;
+                      var ttl = d.title || null
+                      var img = d.url_overridden_by_dest || null
+                      var thmb = 'img/loading.gif'
+                      var subtl = d.subreddit || "reddit"
+                      var txt = d.selftext || null
+                      if (RedMantis.imgChk(img)) {
+                        totalImages++;
+                        final.push({
+                          type: "card-mobile",
+                          title: ttl,
+                          subtitle: "r/"+subtl,
+                          imageUrl: img,
+                          download: img,
+                          content: txt,
+                          thumbnail: thmb
+                        })
+                      }
+                    }
+                  })
+                }
 
-            //     if (final.length > 0) {
-            //       this.posts = final
-            //       this.posts.push({
-            //         type: "paragraph",
-            //         alignment: "center",
-            //         content: "End of Result"
-            //       })
-            //       console.log("[MEMES] Showing " + totalImages + " of " + totalPosts + " memes.")
-            //     } else {
-            //       this.posts = [
-            //         {
-            //           type: "paragraph",
-            //           alignment: "center",
-            //           content: "No data, try restarting the app to retrieve new posts"
-            //         },
-            //         {
-            //           type: "restart"
-            //         }
-            //       ]
-            //     }
+                if (final.length > 0) {
+                  this.posts = final
+                  this.posts.push({
+                    type: "paragraph",
+                    alignment: "center",
+                    content: "End of Result"
+                  })
+                  console.log("[MEMES] Showing " + totalImages + " of " + totalPosts + " memes.")
+                } else {
+                  this.posts = [
+                    {
+                      type: "paragraph",
+                      alignment: "center",
+                      content: "No data, try restarting the app to retrieve new posts"
+                    },
+                    {
+                      type: "restart"
+                    }
+                  ]
+                }
 
-            //   }
-            // } else {
-            //   this.posts = [
-            //     {
-            //       type: "paragraph",
-            //       alignment: "center",
-            //       content: "No data, try restarting the app to retrieve new posts"
-            //     },
-            //     {
-            //       type: "restart"
-            //     }
-            //   ]
-            // }
+              }
+            } else {
+              this.posts = [
+                {
+                  type: "paragraph",
+                  alignment: "center",
+                  content: "No data, try restarting the app to retrieve new posts"
+                },
+                {
+                  type: "restart"
+                }
+              ]
+            }
+          */
+          },
+          next: function(show = 5){
+            var posts = this.posts;
+            if (show < 1) {show = 1}
+            for (var i = 0; i < show; i++) {
+              if (posts.length > 0) {
+                this.memes.push(posts.shift())
+              }
+            }
+            this.posts = posts;
+            console.log(this.posts.length)
           },
           forceFileDownload(response,filename){
             const url = window.URL.createObjectURL(new Blob([response.data]))

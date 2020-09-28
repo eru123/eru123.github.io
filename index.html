@@ -208,13 +208,29 @@
           </div>
         </div>
         <div v-if="fetching" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
-        <div v-if="announcements">
+        <div v-if="announcements && !fetching">
           <h3 class="my-4">Announcements</h3>
           <v-card v-for="anc in announcements" class="my-4" :key="anc.title + anc.content">
             <v-card-title>{{anc.title}}</v-card-title>
             <v-card-subtitle>{{anc.subtitle}}</v-card-subtitle>
             <v-card-text>{{anc.content}}</v-card-text>
           </v-card>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="memes">
+      <div>
+        <div v-if="fetching" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
+        <div v-if="!fetching">
+          <v-card v-for="meme in memes" :key="meme.title + meme.url_overridden_by_dest" class="my-8" style="max-width:600px;margin-right:auto;margin-left:auto">
+            <v-card-title v-if="meme.title"><span class="headline">{{meme.title}}</span></v-card-title>
+            <v-card-subtitle v-if="meme.subreddit">r/{{meme.subreddit}}</v-card-subtitle>
+            <v-card-subtitle v-if="!meme.subreddit && meme.author">u/{{meme.author}}</v-card-subtitle>
+            <v-img :src="meme.url_overridden_by_dest"></v-img>
+          </v-card>
+          <div align="center" v-if="posts.length > 0" class="mt-8 mb-12"><v-btn color="primary" @click="next(5)">See more</v-btn></div>
+          <div align="center" v-if="posts.length <= 0" class="mt-8 mb-12">End of Result</div>
         </div>
       </div>
     </script>
@@ -404,6 +420,8 @@
         </div>
       </div>
     </script>
+
+   
 
     <!-- Production -->
     <!-- <script src="js/vue.min.js"></script> -->
