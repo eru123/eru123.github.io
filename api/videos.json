@@ -38,35 +38,5 @@
         ]
       }
     ]
-  },
-  {
-  	"id": "math",
-  	"name": "Mathematics",
-  	"childs": []
-  },
-  {
-  	"id": "science_and_technology",
-  	"name": "Science & Technology",
-  	"childs": []
-  },
-  {
-  	"id": "english",
-  	"name": "English",
-  	"childs": []
-  },
-  {
-  	"id": "perdev",
-  	"name": "Personal Development",
-  	"childs": []
-  },
-  {
-  	"id": "anime",
-  	"name": "Anime",
-  	"childs": []
-  },
-  {
-  	"id": "kdrama",
-  	"name": "K-Drama",
-  	"childs": []
   }
 ]
