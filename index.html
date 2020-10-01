@@ -139,7 +139,8 @@
     <div id="app">
       <v-app v-if="!browser">
         <v-navigation-drawer v-model="drawer" app>
-          <v-list dense>
+          <v-subheader>MENU</v-subheader>
+          <v-list shaped>
             <v-list-item v-for="item in menu" link :href="item.link" :key="item.name">
               <v-list-item-action>
                 <v-icon>{{item.icon}}</v-icon>

@@ -395,7 +395,7 @@ const app_data = [
         },
         methods: {
           refreshMemes: function () {
-            this.posts = app__memes();
+            this.posts = RedMantis.shuffleArray(app__memes());
             this.memes = [];
             this.next();
           },
