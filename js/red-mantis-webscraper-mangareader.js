@@ -8,6 +8,51 @@ class MangaReader {
       return fn(obj[key], key);
     });
   }
+
+  async home(){
+    var wp = this.wp;
+    return await wp
+      .url("https://www.mangareader.net")
+      .then(e => {
+        var doc = e.toHtml;
+        var result = {}
+
+        var latest = []
+        var updates = []
+        var popular = []
+
+        this.forEachValue(doc.querySelectorAll(".d53"),function(item,key){
+          item = item.querySelector("a")
+          latest.push({
+            title: item.innerHTML,
+            code: item.getAttribute("href").substr(1)
+          })
+        })
+
+        this.forEachValue(doc.querySelectorAll(".d72"),function(item,key){
+          item = item.querySelector("a")
+          popular.push({
+            title: item.innerHTML,
+            code: item.getAttribute("href").substr(1)
+          })
+        })
+        this.forEachValue(doc.querySelectorAll(".d41"),function(item,key){
+          updates.push({
+            code: item.getAttribute("href").substr(1),
+            title: item.querySelector("img").getAttribute("alt"),
+            img: "https://" + item.querySelector("img").getAttribute("src")
+          })
+        })
+
+        result.latest = latest
+        result.updates = updates
+        result.popular = popular
+
+        return result
+      })
+  }
+
+
   async search(query) {
     var wp = this.wp;
     return await wp

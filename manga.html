@@ -26,6 +26,7 @@
     <meta name="twitter:card" content="summary" />
     <meta property="twitter:title" content="Red Mantis Portal" />
     <meta name="twitter:site" content="@EruRoraito9" />
+    <title>Manga Reader</title>
     <style>
       * {
         -webkit-touch-callout: none;
@@ -141,17 +142,69 @@
   </head>
   <body>
     <div id="app">
-      <div
-        v-for="item in result"
-        style="border: 1px solid #333; margin: 50px auto"
-      >
-        <img :src="item.cover" height="100px" />
-        <a :href="item.link"><h4>{{item.title}}</h4></a>
-        <div>{{item.description}}</div>
-        <div>{{item.genre}}</div>
-      </div>
+      <router-view></router-view>
     </div>
+    <script type="text/x-template" id="main">
+      <v-app>
+        <v-navigation-drawer v-model="drawer" app>
+          <v-subheader>MENU</v-subheader> 
+          <v-list shaped>
 
+            <v-list-item link href="#/app">
+              <v-list-item-action><v-icon>mdi-home</v-icon></v-list-item-action>
+              <v-list-item-content><v-list-item-title>Home</v-list-item-title></v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link href="#/app/history">
+              <v-list-item-action><v-icon>mdi-history</v-icon></v-list-item-action>
+              <v-list-item-content><v-list-item-title>History</v-list-item-title></v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link href="#/app/about">
+              <v-list-item-action><v-icon>mdi-information</v-icon></v-list-item-action>
+              <v-list-item-content><v-list-item-title>About</v-list-item-title></v-list-item-content>
+            </v-list-item>
+
+          </v-list>
+        </v-navigation-drawer>
+
+        <v-app-bar app color="primary" dark>
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-toolbar-title>Manga Reader</v-toolbar-title>
+        </v-app-bar>
+
+        <v-main>
+          <router-view></router-view>
+        </v-main>
+      </v-app>
+    </script>
+    <script type="text/x-template" id="home">
+      <v-container fluid>
+        <div v-if="loading">Loading . . . </div>
+        <div>
+          <h3 v-if="updates.length > 0" class="header">Recent updates</h3>
+          <div class="app-flex-parent">
+            <div class="app-flex-child-5 app-flex-child-lg-5 app-flex-child-md-5 app-flex-child-sm-4 p-1" v-for="up in updates">
+              <v-card link :href="'#/app/manga/' + up.code" class="" max-width="200" color="#333">
+                <v-img :src="up.img" class="white--text align-end" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"  height="300">
+                  <v-card-title v-text="up.title"></v-card-title>
+                </v-img>
+              </v-card>
+            </div>
+          </div>
+        </div>
+      </v-container>
+    </script>
+    <script type="text/x-template" id="history">
+      <div>
+        <h1>history</h1>
+      </div>
+    </script>
+    <script type="text/x-template" id="about">
+      <div>
+        <h1>about</h1>
+      </div>
+    </script>
     <!-- Production -->
     <!-- <script src="js/vue.min.js"></script> -->
 
@@ -162,22 +215,100 @@
     <script src="js/vuex.js"></script>
     <script src="js/vuetify.js"></script>
     <script src="js/axios.min.js"></script>
-    <script src="js/marked.min.js"></script>
     <script src="js/red-mantis-webparser.js"></script>
     <script src="js/red-mantis-webscraper-mangareader.js"></script>
     <script>
+      const reader = new MangaReader()
+
+      Vue.use(Vuex);
+      Vue.use(Vuetify);
+
+      const store = new Vuex.Store();
+
+      const routes = [
+        { 
+          path : "",
+          redirect: "/app"
+        },
+        { 
+          name: "App",
+          path: "/app",
+          component: {
+            template: "#main",
+            data(){
+              return {
+                drawer: null,
+                recent: [],
+                updates: [],
+                popular: [],
+                search: ""
+              }
+            }
+          },
+          children: [
+            {
+              name: "Home",
+              path: "",
+              component: {
+                template: "#home",
+                data(){
+                  return {
+                    loading: false,
+                    popular: [],
+                    recent: [],
+                    updates: []
+                  }
+                },
+                mounted(){
+                  this.getResource()
+                },
+                methods: {
+                  getResource : async function(){
+                    this.loading = true;
+                    reader.home()
+                      .then(e => {
+                        this.popular = e.popular
+                        this.recent = e.recent
+                        this.updates = e.updates
+                        console.log("fetched")
+                        console.log(this.popular)
+                        console.log(this.recent)
+                      })
+                      .catch(e => {
+                        console.error("[ERROR] Failed to fetch resources.")
+                        alert(e)
+                      })
+                      .finally(() => {
+                        this.loading = false
+                      })
+                  }
+                }
+              }
+            },
+            {
+              name: "History",
+              path: "history",
+              component: {
+                template: "#history"
+              }
+            },
+            {
+              name: "About",
+              path: "about",
+              component: {
+                template: "#about"
+              }
+            }
+          ]
+
+        }
+      ]
+      const router = new VueRouter({ routes: routes });
       const app = new Vue({
         el: "#app",
-        data() {
-          return {
-            result: [],
-          };
-        },
-        created() {
-          reader = new MangaReader();
-
-          reader.search("black clover").then((e) => console.log(e));
-        },
+        store,
+        router,
+        vuetify: new Vuetify({}),
       });
     </script>
   </body>
