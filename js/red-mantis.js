@@ -190,7 +190,7 @@
     } else if (hours == 12) {
       res = "Noon"
     } else if (hours <= 17) {
-      res = "After Noon"
+      res = "Afternoon"
     } else if (hours <= 20) {
       res = "Evening"
     } else if (hours > 20) {

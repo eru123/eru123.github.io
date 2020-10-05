@@ -235,11 +235,11 @@
         </div>
         <div v-if="fetching" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
         <div v-if="announcements && !fetching">
-          <h3 class="my-4">Announcements</h3>
+          <h3 class="my-4" v-if="announcements.length > 0">Announcements</h3>
           <v-card v-for="anc in announcements" class="my-4" :key="anc.title + anc.content">
             <v-card-title>{{anc.title}}</v-card-title>
             <v-card-subtitle>{{anc.subtitle}}</v-card-subtitle>
-            <v-card-text>{{anc.content}}</v-card-text>
+            <v-card-text v-md>{{anc.content}}</v-card-text>
           </v-card>
         </div>
       </div>
@@ -459,6 +459,7 @@
     <script src="js/axios.min.js"></script>
     <script src="js/marked.min.js"></script>
     <script src="js/red-mantis.js"></script>
+    <script src="js/red-mantis-textparser.js"></script>
     <script src="js/comp.js"></script>
     <script src="app.js"></script>
     <script src="js/main.js"></script>

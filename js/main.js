@@ -26,6 +26,12 @@ try {
 
 var router = new VueRouter({ routes: routes });
 
+Vue.directive('md', {
+  bind(el){
+    el.innerHTML = RedMantisTextParser.toMarkdown(el.textContent)
+  }
+})
+
 new Vue({
   el: "#app",
   data: store.state,
