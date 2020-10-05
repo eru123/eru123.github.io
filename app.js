@@ -24,37 +24,37 @@ const app_data = [
                 link: "#/books",
                 description: "Free Books",
                 icon: "mdi-book-open-variant",
-                color: "#588c7e"
+                color: "#588c7e",
               },
               {
                 title: "Videos",
                 link: "#/videos",
                 description: "Youtube Videos",
                 icon: "mdi-youtube",
-                color: "#bc5a45"
+                color: "#bc5a45",
               },
               {
                 title: "Memes",
                 link: "#/memes",
                 description: "Reddit Memes",
                 icon: "mdi-dance-pole",
-                color: "#034f84"
+                color: "#034f84",
               },
               {
                 title: "About",
                 link: "#/about",
                 description: "About App",
                 icon: "mdi-alpha-a-circle",
-                color: "#622569"
-              }
+                color: "#622569",
+              },
             ],
             fetching: true,
-            announcements: []
-          }
+            announcements: [],
+          };
         },
-        created: async function() {
+        created: async function () {
           changeDocTitle("Red Mantis");
-          this.greet = "Hello, " + RedMantis.greet()
+          this.greet = "Hello, " + RedMantis.greet();
           while (this.$store.state.fetching) {
             await delay(0.1);
           }
@@ -62,12 +62,12 @@ const app_data = [
           this.announcements = app__announcements();
         },
         methods: {
-          key: function(){
-            var key = this.uKey
-            this.uKey++
+          key: function () {
+            var key = this.uKey;
+            this.uKey++;
             return key;
-          }
-        }
+          },
+        },
       },
     },
   },
@@ -83,19 +83,19 @@ const app_data = [
           return {
             posts: [
               {
-                type:"loading"
-              }
+                type: "loading",
+              },
             ],
           };
         },
-        created: async function() {
+        created: async function () {
           changeDocTitle("Books");
 
           while (this.$store.state.fetching) {
             await delay(0.5);
           }
-          
-          await this.retrieveBooks()
+
+          await this.retrieveBooks();
         },
         methods: {
           retrieveBooks: async function () {
@@ -104,62 +104,59 @@ const app_data = [
             var categories = app__booksCategories();
 
             if (books.length > 0) {
-
-              var recommended =  this.recommend();
+              var recommended = this.recommend();
 
               this.posts.push({
                 type: "heading",
                 level: 3,
-                content: "Recommended"
-              })
+                content: "Recommended",
+              });
               this.posts.push({
                 type: "books-recommended",
-                items: recommended
-              })
+                items: recommended,
+              });
 
               if (categories.length > 0) {
                 this.posts.push({
                   type: "heading",
                   level: 3,
-                  content: "Categories"
-                })
-                var ctgs_final = []
+                  content: "Categories",
+                });
+                var ctgs_final = [];
 
-                RedMantis.foreach(categories,function(ctg){
-                  var ctgs = app__booksTagsFromCategory(ctg)
+                RedMantis.foreach(categories, function (ctg) {
+                  var ctgs = app__booksTagsFromCategory(ctg);
                   ctgs_final.push({
                     category: ctg,
-                    tags: ctgs
-                  })
-                })
-                
+                    tags: ctgs,
+                  });
+                });
+
                 this.posts.push({
                   type: "books-categories",
-                  items: ctgs_final
-                })
+                  items: ctgs_final,
+                });
               }
-
             } else {
               this.posts = [
                 {
                   type: "paragraph",
                   alignment: "center",
-                  content: "No Data"                  
+                  content: "No Data",
                 },
                 {
-                  type: "reload"
-                }
-              ]
+                  type: "reload",
+                },
+              ];
             }
-            
           },
-          recommend:  function(show = 10){
-            var books =  app__books();
-            return RedMantis.shuffleArray(books).slice(0,show)
+          recommend: function (show = 10) {
+            var books = app__books();
+            return RedMantis.shuffleArray(books).slice(0, show);
           },
-          openBook: function(title,link){
-            this.$store.commit("openBrowser",{title:title,link:link})
-          }
+          openBook: function (title, link) {
+            this.$store.commit("openBrowser", { title: title, link: link });
+          },
         },
       },
     },
@@ -180,41 +177,49 @@ const app_data = [
           };
         },
         created: async function () {
-          changeDocTitle(this.$router.currentRoute.params.category.toUpperCase() || "Book Category");
+          changeDocTitle(
+            this.$router.currentRoute.params.category.toUpperCase() ||
+              "Book Category"
+          );
           while (this.$store.state.fetching) {
             await delay(0.1);
           }
           this.retrieveCategories();
         },
         methods: {
-          retrieveCategories: function(){
-            this.posts = [{
-              type: "back",
-              link: "#/books",
-              name: "Back to Libary"
-            }]
+          retrieveCategories: function () {
+            this.posts = [
+              {
+                type: "back",
+                link: "#/books",
+                name: "Back to Libary",
+              },
+            ];
 
-            var books = app__booksFromCategory(this.$router.currentRoute.params.category)
+            var books = app__booksFromCategory(
+              this.$router.currentRoute.params.category
+            );
 
             if (books.length > 0) {
               this.posts.push({
                 type: "books-category",
-                items: books
-              })
+                items: books,
+              });
             } else {
               this.posts.push({
                 type: "paragraph",
                 alignment: "center",
-                content: "There is no books within this category, try to restart the app to get new updates."
-              })
+                content:
+                  "There is no books within this category, try to restart the app to get new updates.",
+              });
               this.posts.push({
-                type: "restart"
-              })
+                type: "restart",
+              });
             }
           },
-          openBook: function(title,link){
-            this.$store.commit("openBrowser",{title:title,link:link})
-          }
+          openBook: function (title, link) {
+            this.$store.commit("openBrowser", { title: title, link: link });
+          },
         },
       },
     },
@@ -264,14 +269,15 @@ const app_data = [
                 {
                   type: "paragraph",
                   alignment: "center",
-                  content: "No data, try restarting the app to retrieve new posts"
+                  content:
+                    "No data, try restarting the app to retrieve new posts",
                 },
                 {
-                  type: "restart"
-                }
-              ]
+                  type: "restart",
+                },
+              ];
             }
-          }
+          },
         },
       },
     },
@@ -300,7 +306,6 @@ const app_data = [
         },
         methods: {
           retrieveCategories: async function () {
-            
             this.posts = [
               {
                 type: "back",
@@ -324,14 +329,18 @@ const app_data = [
               this.posts.push({
                 type: "paragraph",
                 alignment: "left",
-                content: "No data, try restarting the app to retrieve new posts"
-              })
-              this.posts.push({ type: "restart"})
+                content:
+                  "No data, try restarting the app to retrieve new posts",
+              });
+              this.posts.push({ type: "restart" });
             }
           },
-          openYT: function(name,code){
-            this.$store.commit('openBrowser',{title:name,link: "https://www.youtube.com/embed/" + code})
-          }
+          openYT: function (name, code) {
+            this.$store.commit("openBrowser", {
+              title: name,
+              link: "https://www.youtube.com/embed/" + code,
+            });
+          },
         },
       },
     },
@@ -382,7 +391,7 @@ const app_data = [
             mobile: true,
             fetching: true,
             posts: [],
-            memes: []
+            memes: [],
           };
         },
         created: async function () {
@@ -399,17 +408,19 @@ const app_data = [
             this.memes = [];
             this.next();
           },
-          next: function(show = 5){
+          next: function (show = 5) {
             var posts = this.posts;
-            if (show < 1) {show = 1}
+            if (show < 1) {
+              show = 1;
+            }
             for (var i = 0; i < show; i++) {
               if (posts.length > 0) {
-                this.memes.push(posts.shift())
+                this.memes.push(posts.shift());
               }
             }
             this.posts = posts;
-            console.log(this.posts.length)
-          }
+            console.log(this.posts.length);
+          },
         },
       },
     },
@@ -497,7 +508,6 @@ const app_data = [
                 title: "PayPal",
                 subtitle: "paypal.me/ja1030",
               },
-            
             ],
           };
         },
@@ -517,8 +527,8 @@ const app_data = [
           return {
             posts: [
               {
-                type: 404
-              }
+                type: 404,
+              },
             ],
           };
         },
@@ -527,7 +537,5 @@ const app_data = [
         },
       },
     },
-  }
+  },
 ];
-
-

@@ -30,27 +30,28 @@ new Vue({
   el: "#app",
   data: store.state,
   created() {
-    this.$store.commit('stopFetching')
+    this.$store.commit("stopFetching");
     document.body.style.display = "block";
     changeDocTitle("App");
     this.fetchSource();
   },
   methods: {
     fetchSource: function () {
-      this.$store.commit('startFetching');
-      RedMantis.source({main:["https://eru123.github.com/api/sources.json"],backup:["api/sources.json"]})
-        .then(a => {
-          this.$store.commit('source',a)
-          RedMantis.data(a)
-            .then(b => {
-              this.$store.commit('data',b)
-              this.$store.commit('stopFetching')
-            })
-        })
+      this.$store.commit("startFetching");
+      RedMantis.source({
+        main: ["https://eru123.github.com/api/sources.json"],
+        backup: ["api/sources.json"],
+      }).then((a) => {
+        this.$store.commit("source", a);
+        RedMantis.data(a).then((b) => {
+          this.$store.commit("data", b);
+          this.$store.commit("stopFetching");
+        });
+      });
     },
-    closeBrowser:function(){
-      this.$store.commit('closeBrowser')
-    }
+    closeBrowser: function () {
+      this.$store.commit("closeBrowser");
+    },
   },
   store,
   router,

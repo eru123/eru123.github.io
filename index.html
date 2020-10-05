@@ -29,13 +29,18 @@
     <style>
       * {
         -webkit-touch-callout: none;
-        -webkit-user-select: none; 
-        -khtml-user-select: none; 
-        -moz-user-select: none; 
-        -ms-user-select: none; 
-        user-select: none; 
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
-      h1,h2,h3,h4,h5,h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         color: #333;
       }
       .app-flex-parent {
@@ -44,68 +49,68 @@
       }
       .app-flex-child-5 {
         flex: 1 0 20%;
-        padding: 8px      
+        padding: 8px;
       }
       .app-flex-child-4 {
         flex: 1 0 25%;
-        padding: 8px      
+        padding: 8px;
       }
       .app-flex-child-3 {
         flex: 1 0 33.33%;
-        padding: 8px      
+        padding: 8px;
       }
       .app-flex-child-2 {
         flex: 1 0 50%;
-        padding: 8px      
+        padding: 8px;
       }
       .app-flex-child-1 {
         flex: 1 0 100%;
-        padding: 8px      
+        padding: 8px;
       }
-            /* On screens that are 992px or less, set the background color to blue */
+      /* On screens that are 992px or less, set the background color to blue */
       @media screen and (max-width: 900px) {
         .app-flex-child-lg-5 {
           flex: 1 0 20%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-lg-4 {
           flex: 1 0 25%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-lg-3 {
           flex: 1 0 33.33%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-lg-2 {
           flex: 1 0 50%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-lg-1 {
           flex: 1 0 100%;
-          padding: 8px      
+          padding: 8px;
         }
       }
 
       @media screen and (max-width: 720px) {
         .app-flex-child-md-5 {
           flex: 1 0 20%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-md-4 {
           flex: 1 0 25%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-md-3 {
           flex: 1 0 33.33%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-md-2 {
           flex: 1 0 50%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-md-1 {
           flex: 1 0 100%;
-          padding: 8px      
+          padding: 8px;
         }
       }
 
@@ -113,35 +118,39 @@
       @media screen and (max-width: 600px) {
         .app-flex-child-sm-5 {
           flex: 1 0 20%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-sm-4 {
           flex: 1 0 25%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-sm-3 {
           flex: 1 0 33.33%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-sm-2 {
           flex: 1 0 50%;
-          padding: 8px      
+          padding: 8px;
         }
         .app-flex-child-sm-1 {
           flex: 1 0 100%;
-          padding: 8px      
+          padding: 8px;
         }
       }
     </style>
   </head>
   <body style="display: none">
-
     <div id="app">
       <v-app v-if="!browser">
         <v-navigation-drawer v-model="drawer" app>
           <v-subheader>MENU</v-subheader>
           <v-list shaped>
-            <v-list-item v-for="item in menu" link :href="item.link" :key="item.name">
+            <v-list-item
+              v-for="item in menu"
+              link
+              :href="item.link"
+              :key="item.name"
+            >
               <v-list-item-action>
                 <v-icon>{{item.icon}}</v-icon>
               </v-list-item-action>
@@ -153,7 +162,9 @@
         </v-navigation-drawer>
 
         <v-app-bar app color="primary" dark>
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+          ></v-app-bar-nav-icon>
           <v-toolbar-title>{{pageName}}</v-toolbar-title>
         </v-app-bar>
 
@@ -183,8 +194,22 @@
           </v-btn>
           <v-toolbar-title>{{browserTitle || ''}}</v-toolbar-title>
         </v-app-bar>
-        <v-main style="background-image: url('img/loading.gif');background-repeat: no-repeat;background-position: center;background-size:200px auto;">
-          <iframe :src="browserLink" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <v-main
+          style="
+            background-image: url('img/loading.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 200px auto;
+          "
+        >
+          <iframe
+            :src="browserLink"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         </v-main>
       </v-app>
     </div>
@@ -240,27 +265,27 @@
       <div>
         <div v-if="posts || false">
           <div v-for="post in posts">
-            
+
             <h1 v-if="post.type == 'heading' && post.level == 1">{{post.content}}</h1>
-            
+
             <h2 v-if="post.type == 'heading' && post.level == 2">{{post.content}}</h2>
-           
+
             <h3 v-if="post.type == 'heading' && post.level == 3">{{post.content}}</h3>
-           
+
             <h4 v-if="post.type == 'heading' && post.level == 4">{{post.content}}</h4>
-           
+
             <h5 v-if="post.type == 'heading' && post.level == 5">{{post.content}}</h5>
-         
+
             <h6 v-if="post.type == 'heading' && post.level == 6">{{post.content}}</h6>
-         
+
             <p v-if="post.type == 'paragraph' && post.alignment == 'left'" style="text-align:left">{{post.content}}</p>
-         
+
             <p v-if="post.type == 'paragraph' && post.alignment == 'right'" style="text-align:right">{{post.content}}</p>
-         
+
             <p v-if="post.type == 'paragraph' && post.alignment == 'center'" style="text-align:center">{{post.content}}</p>
-         
+
             <p v-if="post.type == 'paragraph' && post.alignment == 'justify'" style="text-align:justify">{{post.content}}</p>
-         
+
             <v-card v-if="post.type == 'card'" :class="'my-' + (post.my || '8')" >
               <v-list-item v-if="post.avatar" link :href="post.href || ''">
                 <v-list-item-avatar color="#ccc">
@@ -282,7 +307,7 @@
                 <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
               </v-card-actions>
             </v-card>
-         
+
             <v-card v-if="post.type == 'card-mobile'" :class="'my-' + (post.my || '8')" style="max-width:600px;margin-right:auto;margin-left:auto">
               <v-list-item v-if="post.avatar" link :href="post.href || ''">
                 <v-list-item-avatar color="#ccc">
@@ -304,7 +329,7 @@
                 <v-btn v-for="action in post.actions" depressed :color="action.color || 'primary'" :href="action.link" class="ma-2">{{action.name}}</v-btn>
               </v-card-actions>
             </v-card>
-         
+
             <v-carousel hide-delimiters v-if="post.type == 'carousel'">
               <v-carousel-item
                 v-for="(item,i) in post.items"
@@ -312,21 +337,21 @@
                 :src="item.src"
               ></v-carousel-item>
             </v-carousel>
-         
+
             <div v-if="post.type=='youtube'" align="center">
 
               <iframe :width="post.width || '100%'" :height="post.height || '300px'" :src="post.link || ''" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-         
+
             <v-expansion-panels accordion v-if="post.type == 'expansion-panel'">
               <v-expansion-panel v-for="item in post.items">
                 <v-expansion-panel-header>{{item.title}}</v-expansion-panel-header>
                 <v-expansion-panel-content>{{item.content}}</v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
-         
+
             <div v-if="post.type == 'loading'" align="center" class="my-8"><v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular></div>
-            
+
             <v-list-item v-if="post.type == 'videos-categories'" v-for="item in post.items" :href="'#/videos/' + item.id">
               <v-list-item-action>
                 <v-icon>mdi-format-list-bulleted</v-icon>
@@ -335,12 +360,12 @@
                 <v-list-item-title>{{item.name}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            
+
             <div v-if="post.type == 'back'">
               <v-btn class="mb-4" :color="post.color || 'primary'" v-if="post.link" :href="post.link">{{post.name || 'Back'}}</v-btn>
               <v-btn class="mb-4" :color="post.color || 'primary'" v-if="!post.link" @click="$router.back()">{{post.name || 'Back'}}</v-btn>
             </div>
-            
+
             <v-expansion-panels accordion v-if="post.type == 'videos-playlists'" class="my-3">
               <v-expansion-panel v-for="item in post.items" :key="item.code">
                 <v-expansion-panel-header>{{item.name}}</v-expansion-panel-header>
@@ -358,9 +383,9 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
-            
+
             <iframe v-if="post.type == 'videos-playback'" width="100%" height="350" :src="'https://www.youtube.com/embed/' + post.code" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            
+
             <div v-if="post.type == 'reload'" align="center">
 
               <v-btn class="my-4" color="primary" @click="location.reload()">Reload</v-btn>
@@ -422,13 +447,11 @@
       </div>
     </script>
 
-   
-
     <!-- Production -->
     <!-- <script src="js/vue.min.js"></script> -->
 
     <!-- Development -->
-    <script src="js/dev-vue.js"></script> 
+    <script src="js/dev-vue.js"></script>
 
     <script src="js/vue-router.js"></script>
     <script src="js/vuex.js"></script>

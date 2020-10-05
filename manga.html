@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="img/game_item_default.png" />
+    <link rel="stylesheet" href="css/vuetify-gfont.css" />
+    <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="css/vuetify.min.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <meta property="og:title" content="Red Mantis Portal" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads"
+    />
+    <meta
+      property="og:description"
+      content="Free Web Services, Informations, Medias and Entertainment all in one Application without annoying Ads"
+    />
+    <link rel="canonical" href="https://eru123.github.io/" />
+    <meta property="og:url" content="https://eru123.github.io/" />
+    <meta property="og:site_name" content="Red Mantis Portal" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Red Mantis Portal" />
+    <meta name="twitter:site" content="@EruRoraito9" />
+    <style>
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: #333;
+      }
+      .app-flex-parent {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .app-flex-child-5 {
+        flex: 1 0 20%;
+        padding: 8px;
+      }
+      .app-flex-child-4 {
+        flex: 1 0 25%;
+        padding: 8px;
+      }
+      .app-flex-child-3 {
+        flex: 1 0 33.33%;
+        padding: 8px;
+      }
+      .app-flex-child-2 {
+        flex: 1 0 50%;
+        padding: 8px;
+      }
+      .app-flex-child-1 {
+        flex: 1 0 100%;
+        padding: 8px;
+      }
+      /* On screens that are 992px or less, set the background color to blue */
+      @media screen and (max-width: 900px) {
+        .app-flex-child-lg-5 {
+          flex: 1 0 20%;
+          padding: 8px;
+        }
+        .app-flex-child-lg-4 {
+          flex: 1 0 25%;
+          padding: 8px;
+        }
+        .app-flex-child-lg-3 {
+          flex: 1 0 33.33%;
+          padding: 8px;
+        }
+        .app-flex-child-lg-2 {
+          flex: 1 0 50%;
+          padding: 8px;
+        }
+        .app-flex-child-lg-1 {
+          flex: 1 0 100%;
+          padding: 8px;
+        }
+      }
+
+      @media screen and (max-width: 720px) {
+        .app-flex-child-md-5 {
+          flex: 1 0 20%;
+          padding: 8px;
+        }
+        .app-flex-child-md-4 {
+          flex: 1 0 25%;
+          padding: 8px;
+        }
+        .app-flex-child-md-3 {
+          flex: 1 0 33.33%;
+          padding: 8px;
+        }
+        .app-flex-child-md-2 {
+          flex: 1 0 50%;
+          padding: 8px;
+        }
+        .app-flex-child-md-1 {
+          flex: 1 0 100%;
+          padding: 8px;
+        }
+      }
+
+      /* On screens that are 600px or less, set the background color to olive */
+      @media screen and (max-width: 600px) {
+        .app-flex-child-sm-5 {
+          flex: 1 0 20%;
+          padding: 8px;
+        }
+        .app-flex-child-sm-4 {
+          flex: 1 0 25%;
+          padding: 8px;
+        }
+        .app-flex-child-sm-3 {
+          flex: 1 0 33.33%;
+          padding: 8px;
+        }
+        .app-flex-child-sm-2 {
+          flex: 1 0 50%;
+          padding: 8px;
+        }
+        .app-flex-child-sm-1 {
+          flex: 1 0 100%;
+          padding: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div
+        v-for="item in result"
+        style="border: 1px solid #333; margin: 50px auto"
+      >
+        <img :src="item.cover" height="100px" />
+        <a :href="item.link"><h4>{{item.title}}</h4></a>
+        <div>{{item.description}}</div>
+        <div>{{item.genre}}</div>
+      </div>
+    </div>
+
+    <!-- Production -->
+    <!-- <script src="js/vue.min.js"></script> -->
+
+    <!-- Development -->
+    <script src="js/dev-vue.js"></script>
+
+    <script src="js/vue-router.js"></script>
+    <script src="js/vuex.js"></script>
+    <script src="js/vuetify.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/marked.min.js"></script>
+    <script src="js/red-mantis-webparser.js"></script>
+    <script src="js/red-mantis-webscraper-mangareader.js"></script>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            result: [],
+          };
+        },
+        created() {
+          reader = new MangaReader();
+
+          reader.search("black clover").then((e) => console.log(e));
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -14,29 +14,29 @@ const store = new Vuex.Store({
     fetching: true,
   },
   mutations: {
-    openBrowser(state,value){
+    openBrowser(state, value) {
       state.browser = true;
       state.browserLink = value.link;
       state.browserTitle = value.title || "";
     },
-    closeBrowser(state){
+    closeBrowser(state) {
       state.browser = false;
-      state.browserLink = null
-      state.browserTitle = null
+      state.browserLink = null;
+      state.browserTitle = null;
     },
-    source(state,value){
-      state.source = value
+    source(state, value) {
+      state.source = value;
     },
-    data(state,value){
-      state.data = value
+    data(state, value) {
+      state.data = value;
     },
-    stopFetching(state){
+    stopFetching(state) {
       state.fetching = false;
     },
-    startFetching(state){
+    startFetching(state) {
       state.fetching = true;
-    }
-  }
+    },
+  },
 });
 
 function changeDocTitle(t = false) {
@@ -71,7 +71,9 @@ function objectsAreSame(x, y) {
   return objectsAreSame;
 }
 function shuffleArray(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
   while (0 !== currentIndex) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -82,190 +84,197 @@ function shuffleArray(array) {
 
   return array;
 }
-function app__videos(playlist_id = null){
+function app__videos(playlist_id = null) {
   var videos = [];
   var playlist = [];
   if (localStorage.getItem("source")) {
-    var vids = JSON.parse(localStorage.getItem("source")).videos
-    if (Array.isArray(vids)){
-      for (r in vids){
+    var vids = JSON.parse(localStorage.getItem("source")).videos;
+    if (Array.isArray(vids)) {
+      for (r in vids) {
         var sr = vids[r];
         if (localStorage.getItem(sr)) {
-          var d = JSON.parse(localStorage.getItem(sr))
-          RedMantis.foreach(d,function(v){
-            var dups = false
-            RedMantis.foreach(videos,function(vv){
-              if (v.id == vv.id) {dups = true}
-            })
+          var d = JSON.parse(localStorage.getItem(sr));
+          RedMantis.foreach(d, function (v) {
+            var dups = false;
+            RedMantis.foreach(videos, function (vv) {
+              if (v.id == vv.id) {
+                dups = true;
+              }
+            });
             if (!dups) {
-              videos.push(v)
+              videos.push(v);
             }
-
-          })
+          });
         }
       }
     }
-  } 
+  }
   if (playlist_id) {
-    RedMantis.foreach(videos,function(ctg){
-      if (ctg.id === playlist_id) {playlist = ctg.childs}
-    })
+    RedMantis.foreach(videos, function (ctg) {
+      if (ctg.id === playlist_id) {
+        playlist = ctg.childs;
+      }
+    });
     return playlist;
   }
   return videos;
 }
-function app__books(){
+function app__books() {
   var books = [];
   if (localStorage.getItem("source")) {
-    var bks = JSON.parse(localStorage.getItem("source")).books
+    var bks = JSON.parse(localStorage.getItem("source")).books;
     if (Array.isArray(bks)) {
-      RedMantis.foreach(bks,function(bk){
+      RedMantis.foreach(bks, function (bk) {
         if (JSON.parse(localStorage.getItem(bk))) {
           var b = JSON.parse(localStorage.getItem(bk));
-          RedMantis.foreach(b,function(itm){
-            var dups = false
-            RedMantis.foreach(books,function(book){
-              if(book.link === itm.link){
-                dups = true
+          RedMantis.foreach(b, function (itm) {
+            var dups = false;
+            RedMantis.foreach(books, function (book) {
+              if (book.link === itm.link) {
+                dups = true;
               }
-            })
+            });
             if (!dups) {
-              books.push(itm)
+              books.push(itm);
             }
-          })
+          });
         }
-      })
+      });
     }
-  } 
+  }
   return books;
 }
-function app__booksCategories(){
-  var books = app__books()
-  var categories = []
-  RedMantis.foreach(books,function(book){
-    var dups = false
-    RedMantis.foreach(categories,function(ctg){
+function app__booksCategories() {
+  var books = app__books();
+  var categories = [];
+  RedMantis.foreach(books, function (book) {
+    var dups = false;
+    RedMantis.foreach(categories, function (ctg) {
       if (ctg === book.category) {
-        dups = true
+        dups = true;
       }
-    })
+    });
     if (!dups) {
-      categories.push(book.category)
+      categories.push(book.category);
     }
-  })
+  });
   return categories;
 }
-function app__booksTags(){
-  var books = app__books()
-  var tags = []
-  RedMantis.foreach(books,function(book){
-    RedMantis.foreach(book.tags,function(ctg){
-      var dups = false
-      RedMantis.foreach(tags,function(v){
-        if (v === ctg) {dups = true}
-      })
+function app__booksTags() {
+  var books = app__books();
+  var tags = [];
+  RedMantis.foreach(books, function (book) {
+    RedMantis.foreach(book.tags, function (ctg) {
+      var dups = false;
+      RedMantis.foreach(tags, function (v) {
+        if (v === ctg) {
+          dups = true;
+        }
+      });
       if (!dups) {
-        tags.push(ctg)
+        tags.push(ctg);
       }
-    })
-  })
+    });
+  });
   return tags;
 }
-function app__booksTagsFromCategory(category){
-  var books = app__books()
-  var tags = []
-  RedMantis.foreach(books,function(book){
-    RedMantis.foreach(book.tags,function(ctg){
+function app__booksTagsFromCategory(category) {
+  var books = app__books();
+  var tags = [];
+  RedMantis.foreach(books, function (book) {
+    RedMantis.foreach(book.tags, function (ctg) {
       if (book.category === category) {
-        var dups = false
-        RedMantis.foreach(tags,function(v){
-          if (v === ctg) {dups = true}
-        })
+        var dups = false;
+        RedMantis.foreach(tags, function (v) {
+          if (v === ctg) {
+            dups = true;
+          }
+        });
         if (!dups) {
-          tags.push(ctg)
+          tags.push(ctg);
         }
       }
-    })
-  })
+    });
+  });
   return tags;
 }
-function app__booksFromCategory(category){
-  var books = app__books()
-  var result = []
-  RedMantis.foreach(books,function(book){
+function app__booksFromCategory(category) {
+  var books = app__books();
+  var result = [];
+  RedMantis.foreach(books, function (book) {
     if (book.category === category) {
-      result.push(book)
+      result.push(book);
     }
-  })
+  });
 
-  return result
+  return result;
 }
-function app__announcements(){
-  var announcements = []
-  var announce_data = []
+function app__announcements() {
+  var announcements = [];
+  var announce_data = [];
   if (localStorage.getItem("source")) {
-    var sources = JSON.parse(localStorage.getItem("source")).announce
-    for (source in sources){
+    var sources = JSON.parse(localStorage.getItem("source")).announce;
+    for (source in sources) {
       var src = sources[source];
       if (localStorage.getItem(src)) {
-        var d = JSON.parse(localStorage.getItem(src))
-        announce_data.push(d.data.children)
+        var d = JSON.parse(localStorage.getItem(src));
+        announce_data.push(d.data.children);
       }
     }
     for (var i = 0; i < 31; i++) {
-      RedMantis.foreach(announce_data,function(r){
+      RedMantis.foreach(announce_data, function (r) {
         if (r[i] && r[i].data && r[i].kind == "t3") {
           var d = r[i].data;
-          var ttl = d.title || null
-          var img = d.url_overridden_by_dest || null
-          var subtl = d.subreddit || d.author || "reddit"
-          var txt = d.selftext || null
-          var htm = d.selftext_html || null
-          var thmb = "img/loading.gif"
+          var ttl = d.title || null;
+          var img = d.url_overridden_by_dest || null;
+          var subtl = d.subreddit || d.author || "reddit";
+          var txt = d.selftext || null;
+          var htm = d.selftext_html || null;
+          var thmb = "img/loading.gif";
           if (RedMantis.imgChk(img)) {
             announcements.push({
               title: ttl,
-              subtitle: "r/"+subtl,
+              subtitle: "r/" + subtl,
               imageUrl: img,
               content: txt,
               html: htm,
-              thumbnail: thmb
-            })
+              thumbnail: thmb,
+            });
           } else {
             announcements.push({
               title: ttl,
-              subtitle: "r/"+subtl,
+              subtitle: "r/" + subtl,
               html: htm,
-              content: txt
-            })
+              content: txt,
+            });
           }
         }
-      })
+      });
     }
   }
-  return announcements
+  return announcements;
 }
-function app__memes(){
-  var memes = []
-  var reddit = []
+function app__memes() {
+  var memes = [];
+  var reddit = [];
   if (localStorage.getItem("source")) {
-    var sources = JSON.parse(localStorage.getItem("source")).memes
-    for (source in sources){
+    var sources = JSON.parse(localStorage.getItem("source")).memes;
+    for (source in sources) {
       var src = sources[source];
       if (localStorage.getItem(src)) {
-        var d = JSON.parse(localStorage.getItem(src))
-        reddit.push(d.data.children)
+        var d = JSON.parse(localStorage.getItem(src));
+        reddit.push(d.data.children);
       }
     }
     for (var i = 0; i < 31; i++) {
-      RedMantis.foreach(reddit,function(r){
+      RedMantis.foreach(reddit, function (r) {
         if (r[i] && r[i].data) {
           if (RedMantis.imgChk(r[i].data.url_overridden_by_dest)) {
-            memes.push(r[i].data)
+            memes.push(r[i].data);
           }
         }
-      })
+      });
     }
   }
-  return memes
+  return memes;
 }
