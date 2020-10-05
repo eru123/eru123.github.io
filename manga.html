@@ -276,7 +276,7 @@
                       })
                       .catch(e => {
                         console.error("[ERROR] Failed to fetch resources.")
-                        alert(e)
+                        alert("Please make sure you have a stable internet connection and CORS enabled then try again.")
                       })
                       .finally(() => {
                         this.loading = false
