@@ -158,7 +158,6 @@ class MangaReader {
             final.chapters.push(chap);
           }
         });
-
         return final;
       })
       .catch(() => {

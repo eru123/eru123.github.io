@@ -140,10 +140,12 @@
       }
     </style>
   </head>
-  <body>
+  <body background-color="#fff" style="display: none">
     <div id="app">
-      <router-view></router-view>
+      <div v-if="error">{{error}}</div>
+      <router-view v-if="!error"></router-view>
     </div>
+
     <script type="text/x-template" id="main">
       <v-app>
         <v-navigation-drawer v-model="drawer" app>
@@ -153,6 +155,11 @@
             <v-list-item link href="#/app">
               <v-list-item-action><v-icon>mdi-home</v-icon></v-list-item-action>
               <v-list-item-content><v-list-item-title>Home</v-list-item-title></v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link href="#/app/search">
+              <v-list-item-action><v-icon>mdi-magnify</v-icon></v-list-item-action>
+              <v-list-item-content><v-list-item-title>Search</v-list-item-title></v-list-item-content>
             </v-list-item>
 
             <v-list-item link href="#/app/history">
@@ -168,7 +175,7 @@
           </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary" dark>
+        <v-app-bar app color="primary" dark elevate-on-scroll elevation="6">
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title>Manga Reader</v-toolbar-title>
         </v-app-bar>
@@ -178,14 +185,20 @@
         </v-main>
       </v-app>
     </script>
+
     <script type="text/x-template" id="home">
       <v-container fluid>
-        <div v-if="loading">Loading . . . </div>
-        <div>
-          <h3 v-if="updates.length > 0" class="header">Recent updates</h3>
-          <div class="app-flex-parent">
-            <div class="app-flex-child-5 app-flex-child-lg-5 app-flex-child-md-5 app-flex-child-sm-4 p-1" v-for="up in updates">
-              <v-card link :href="'#/app/manga/' + up.code" class="" max-width="200" color="#333">
+        
+        <v-sheet class="pa-3" v-if="loading">
+            <v-skeleton-loader class="mx-auto" max-width="600" type="article, actions"></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto" max-width="600" type="card"></v-skeleton-loader>
+        </v-sheet>
+        
+        <div v-if="updates.length > 0">
+          <v-subheader>Latest Chapter Updates</v-subheader>
+          <div class="app-flex-parent" >
+            <div class="app-flex-child-5 app-flex-child-lg-5 app-flex-child-md-5 app-flex-child-sm-4 p-1" v-for="(up, i) in updates" :key="i">
+              <v-card link :href="'#/manga/' + up.code" class="" max-width="200" color="#333">
                 <v-img :src="up.img" class="white--text align-end" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"  height="300">
                   <v-card-title v-text="up.title"></v-card-title>
                 </v-img>
@@ -193,16 +206,118 @@
             </div>
           </div>
         </div>
+
+        <div v-if="popular.length > 0">
+          <v-card max-width="600" class="mx-auto" elevation="0">
+            <v-list>
+              <v-subheader>Popular Manga</v-subheader>
+              <v-list-item v-for="(r,i) in popular" :key="i" link :href="'#/manga/' + r.code">
+                <v-list-item-avatar>
+                  <v-avatar  color="teal"  size="48"   >
+                    <span class="white--text headline">{{i + 1}}</span>
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-text="r.title"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </div>
+
+        <div v-if="latest.length > 0">
+          <v-card max-width="600" class="mx-auto" elevation="0">
+            <v-list>
+              <v-subheader>Newest Manga</v-subheader>
+              <v-list-item v-for="(r,i) in latest" :key="i" link :href="'#/manga/' + r.code">
+                <v-list-item-avatar>
+                  <v-avatar  color="purple"  size="48"   >
+                    <span class="white--text headline">{{i + 1}}</span>
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-text="r.title"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </div>
+
+        
       </v-container>
     </script>
+
     <script type="text/x-template" id="history">
       <div>
         <h1>history</h1>
       </div>
     </script>
+
     <script type="text/x-template" id="about">
       <div>
         <h1>about</h1>
+      </div>
+    </script>
+    <script type="text/x-template" id="manga">
+      <div>
+        <v-img src="img/loading.gif" v-if="loading"></v-img>
+        <v-app v-if="!loading">
+          <v-app-bar color="white" elevate-on-scroll app>
+            <v-btn icon link @click="goBack">  <v-icon>mdi-arrow-left</v-icon>  </v-btn>
+            <v-toolbar-title>{{ manga.title || 'Manga Reader'}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-app-bar>
+
+          <v-main>
+            <v-container>
+                <v-card max-width="600" class="mx-auto mb-4" elevation="6">
+                      <v-img :src="manga.cover || ''" max-height="600"></v-img>
+                      <v-card-title>{{ manga.name || (manga.title || 'Unknown')}}</v-card-title>
+                      <v-card-text>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Description:</b> {{ manga.description || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Author:</b> {{ manga.author || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Artist:</b> {{ manga.artist || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Year of release:</b> {{ manga.year_of_release || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Status:</b> {{ manga.status || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Reading Direction:</b> {{ manga.reading_direction || ''}}</div>
+                        <div class="text--secondary font-weight-light text-justify pr-3"><b>Genre:</b> {{ manga.genre || ''}}</div>
+                      </v-card-text>
+                </v-card>
+                <v-card max-width="600" class="mx-auto" elevation="0">
+                  <v-subheader>Chapters ({{chapterCount}})</v-subheader>
+                  <v-list>
+                    <v-list-item v-for="(c,i) in manga.chapters" :key="i" link :href="'#/manga/' + c.code">
+                      <v-list-item-avatar>
+                        <v-avatar  color="teal"  size="48"   >
+                          <span class="white--text headline">{{i + 1}}</span>
+                        </v-avatar>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title v-text="c.chapter"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+            </v-container>
+          </v-main>
+        </v-app>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="chapter">
+      <div>
+        <v-img src="img/loading.gif" v-if="loading"></v-img>
+        <v-app v-if="!loading">
+          <v-app-bar color="white" elevate-on-scroll app>
+            <v-btn icon link @click="goBack">  <v-icon>mdi-arrow-left</v-icon>  </v-btn>
+            <v-toolbar-title>s</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-app-bar>
+
+          <v-main>
+            <v-img v-for="(img,i) in images" :key="i" src="img/loading.gif" max-width="600" class="mx-auto"></v-img>
+          </v-main>
+        </v-app>
       </div>
     </script>
     <!-- Production -->
@@ -218,12 +333,37 @@
     <script src="js/red-mantis-webparser.js"></script>
     <script src="js/red-mantis-webscraper-mangareader.js"></script>
     <script>
+      const bus = new Vue()
       const reader = new MangaReader()
 
-      Vue.use(Vuex);
+      const error = {
+        cors : "Please check your internet connection and make sure have CORS enabled "
+      }
+      const app__history = function(){
+        if (!localStorage.getItem('app__history') || localStorage.getItem('app__history') == "{}") {
+
+        }
+
+        var history = JSON.parse(localStorage.getItem('app__history') || "{}")
+
+        return {
+          history:  history,
+          data: history,
+          add(code,chap = ""){
+            history[code] = chap
+            localStorage.setItem('app__history',JSON.stringify(history))
+          },
+          del(code){
+            if (history[code]) {
+              delete history[code]
+              localStorage.setItem('app__history',JSON.stringify(history))
+            }
+          }
+        }
+      }
+
       Vue.use(Vuetify);
 
-      const store = new Vuex.Store();
 
       const routes = [
         { 
@@ -231,7 +371,6 @@
           redirect: "/app"
         },
         { 
-          name: "App",
           path: "/app",
           component: {
             template: "#main",
@@ -253,10 +392,10 @@
                 template: "#home",
                 data(){
                   return {
-                    loading: false,
                     popular: [],
-                    recent: [],
-                    updates: []
+                    latest: [],
+                    updates: [],
+                    loading: false
                   }
                 },
                 mounted(){
@@ -264,19 +403,25 @@
                 },
                 methods: {
                   getResource : async function(){
-                    this.loading = true;
+                    if (localStorage.getItem('home')) {
+                      var h = JSON.parse(localStorage.getItem('home') || "{}")
+                      this.popular = h.popular
+                      this.latest = h.latest
+                      this.updates = h.updates
+                    } else {
+                      this.loading = true
+                    }
+                    
                     reader.home()
                       .then(e => {
+                        localStorage.setItem('home', JSON.stringify(e))
+
                         this.popular = e.popular
-                        this.recent = e.recent
+                        this.latest = e.latest
                         this.updates = e.updates
-                        console.log("fetched")
-                        console.log(this.popular)
-                        console.log(this.recent)
                       })
                       .catch(e => {
-                        console.error("[ERROR] Failed to fetch resources.")
-                        alert("Please make sure you have a stable internet connection and CORS enabled then try again.")
+
                       })
                       .finally(() => {
                         this.loading = false
@@ -300,13 +445,141 @@
               }
             }
           ]
+        },
+        {
+          path: "/manga",
+          component: {
+            template: "<router-view></router-view>"
+          },
+          children: [
+            { 
+              name: "Manga",
+              path: ":manga",
+              component: {
+                template: "#manga",
+                data() {
+                  return {
+                    loading: false,
+                    chapterCount: 0,
+                    manga: {}
+                  }
+                },
+                mounted(){
+                  this.fetchResource()
+                },
+                methods: {
+                  countChapter(){
+                    if (this.manga.chapters) {
+                      this.chapterCount =  this.manga.chapters.length
+                    } else {
+                       this.chapterCount = 0
+                    }
+                  },
+                  fetchResource(){
 
-        }
+                    var title = this.$router.currentRoute.params.manga
+
+                    if(localStorage.getItem(title)){
+                      this.manga = JSON.parse(localStorage.getItem(title) || "{}");
+                    } else {
+                      this.loading = true
+                    }
+
+                    reader.manga(title)
+                      .then(e => {
+                        if (e && e.chapters.length >= 0) {
+                          this.manga = e
+                          localStorage.setItem(title,JSON.stringify(e))
+                          app__history().add(title)
+                        }
+                      })
+                      .catch(e => {
+                        bus.$emit('error', error.cors)
+                      })
+                      .finally(()=> {
+                        this.loading = false
+                        this.countChapter()
+                      })
+                    this.countChapter()
+                  },
+                  goBack() {
+                    window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+                  }
+                }
+              }
+            },
+            { 
+              name: "Chapter",
+              path: ":manga/:chapter",
+              component: {
+                template: "#chapter",
+                data() {
+                  return {
+                    title:"",
+                    prev:"",
+                    next:"",
+                    loading: false,
+                    images: []
+                  }
+                },
+                mounted(){
+                  this.fetchResource()
+                },
+                methods: {
+                  fetchResource(){
+
+                    var title = this.$router.currentRoute.params.manga
+                    var chapter = this.$router.currentRoute.params.chapter
+                    var cc = title + "/" + chapter;
+                    
+                    if (localStorage.getItem(cc)) {
+                      this.images = JSON.parse(localStorage.getItem(cc) || "{}")
+                      this.loading = false
+                    } else {
+                      this.loading = true
+                    }
+
+                    reader.chapter(title + "/" + chapter)
+                      .then(e => {
+                        if (e && e.length > 0) {
+                          console.log(e)
+                          this.images = e
+                          localStorage.setItem(cc,JSON.stringify(e))
+                          app__history().add(title,chapter)
+                        }
+                      })
+                      .catch(e => {
+                        bus.$emit('error',error.cors)
+                      })
+                      .finally(() => {
+                        this.loading = false
+                      })
+                  },
+                  goBack() {
+                    window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+                  }
+                }
+              }
+            }
+          ]
+        },
       ]
       const router = new VueRouter({ routes: routes });
+
       const app = new Vue({
         el: "#app",
-        store,
+        data(){
+          return {
+            loading: true,
+            error: ""
+          }
+        },
+        created(){
+          document.body.style.display = "block"
+          bus.$on('error',(value) => {
+            this.error = value
+          })
+        },
         router,
         vuetify: new Vuetify({}),
       });
