@@ -45,7 +45,7 @@ new Vue({
     fetchSource: function () {
       this.$store.commit("startFetching");
       RedMantis.source({
-        main: ["https://eru123.github.com/api/sources.json"],
+        main: ["https://cors-anywhere.herokuapp.com/https://eru123.github.com/api/sources.json"],
         backup: ["api/sources.json"],
       }).then((a) => {
         this.$store.commit("source", a);

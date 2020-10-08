@@ -310,10 +310,9 @@
         <v-app v-if="!loading">
           <v-app-bar color="white" elevate-on-scroll app>
             <v-btn icon link @click="goBack">  <v-icon>mdi-arrow-left</v-icon>  </v-btn>
-            <v-toolbar-title>s</v-toolbar-title>
+            <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
           </v-app-bar>
-
           <v-main>
             <v-img v-for="(img,i) in images" :key="i" :src="img.u" max-width="600" class="mx-auto"></v-img>
           </v-main>

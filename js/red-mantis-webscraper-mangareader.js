@@ -1,6 +1,9 @@
 class MangaReader {
+
+
   constructor() {
     this.wp = RedMantisWebParser;
+    this.host = "https://cors-anywhere.herokuapp.com/https://www.mangareader.net/";
   }
 
   forEachValue(obj, fn) {
@@ -12,7 +15,7 @@ class MangaReader {
   async home(){
     var wp = this.wp;
     return await wp
-      .url("https://www.mangareader.net")
+      .url(this.host)
       .then(e => {
         var doc = e.toHtml;
         var result = {}
@@ -56,7 +59,7 @@ class MangaReader {
   async search(query) {
     var wp = this.wp;
     return await wp
-      .url("https://www.mangareader.net/search/?nsearch=" + query)
+      .url(this.host + "search/?nsearch=" + query)
       .then((e) => {
         var final = [];
         var result = e.toHtml.querySelectorAll(".d54");
@@ -97,7 +100,7 @@ class MangaReader {
   async manga(code) {
     var wp = this.wp;
     return await wp
-      .url("https://www.mangareader.net/" + code)
+      .url( this.host + code)
       .then((e) => {
         var final = {};
 
@@ -167,7 +170,7 @@ class MangaReader {
   async chapter(code) {
     var wp = this.wp;
     return await wp
-      .url("https://www.mangareader.net/" + code)
+      .url(this.host + code)
       .then((e) => {
         var result = [];
         var rawImages =
