@@ -178,6 +178,8 @@
         <v-app-bar app color="primary" dark elevate-on-scroll elevation="6">
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title>Manga Reader</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon link href="#/app/search"><v-icon>mdi-magnify</v-icon></v-btn>
         </v-app-bar>
 
         <v-main>
@@ -254,9 +256,34 @@
     </script>
 
     <script type="text/x-template" id="search">
-      <div>
-        <h1>Search</h1>
-      </div>
+      <v-container>
+        <v-text-field label="Search" :loading="loading" :disabled="loading" v-model="query">
+          <v-btn icon slot="append" @click="search" link><v-icon color="primary">mdi-magnify</v-icon></v-btn>
+        </v-text-field>
+        <v-alert border="left" colored-border type="error" elevation="2" v-if="error" @click="error = ''">{{error}}</v-alert>
+        <div v-if="!searched" class="py-8 text-center">
+          <v-icon size="200" class="mx-auto pa-4" color="primary" style="background:#cceeff;border-radius:50%">mdi-magnify</v-icon>
+        </div>
+        <v-subheader v-if="searched && !error" class="text-center">{{results.length || 0}} RESULTS</v-subheader>
+        <div v-for="(r,i) in results" :key="i" class="mb-4">
+          <v-card outlined elevation="0">
+            <div style="display:flex">
+              <div>
+               <v-img :src="r.cover" width="150"></v-img>
+              </div>
+              <div class="pa-2" style="flex:1">
+                <h3 class="mb-2">
+                  <a :href="'#/manga/' + r.link" style="color:#333;text-decoration:none;">{{r.title}}</a>
+                </h3>                
+                <small color="secondary">
+                  <div><b>Description:</b> {{r.description}}</div>
+                  <div><b>Genre:</b> {{r.genre}}</div>
+                </small>
+              </div>
+            </div>
+          </v-card>
+        </div>
+      </v-container>  
     </script>
     <script type="text/x-template" id="history">
       <v-container fluid>
@@ -343,7 +370,6 @@
 
     <script type="text/x-template" id="chapter">
       <div>
-        
         <v-app>
           <v-app-bar color="white" elevate-on-scroll app>
             <v-btn icon link @click="goBack">  <v-icon>mdi-arrow-left</v-icon>  </v-btn>
@@ -500,7 +526,34 @@
               name: "Search",
               path: "search",
               component: {
-                template: "#search"
+                template: "#search",
+                data(){
+                  return {
+                    query: "",
+                    loading: false,
+                    searched: false,
+                    error: "",
+                    results: []
+                  }
+                },
+                methods: {
+                  search(){
+                    this.searched = false;
+                    this.loading = true
+                    reader.search(this.query)
+                      .then(e => {
+                        console.log(e)
+                        this.results = e
+                      })
+                      .catch(e => {
+                        this.error = e
+                      })
+                      .finally(() => {
+                        this.searched = true;
+                        this.loading = false
+                      })
+                  }
+                }
               }
             },
             {
